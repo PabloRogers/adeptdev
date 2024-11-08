@@ -1,8 +1,10 @@
-// import { RegisterFrom } from "@/features/auth/components/register/RegisterForm";
+import FormContentWrapper from "@/features/auth/components/FormContentWrapper";
+import RegisterForm from "@/features/auth/components/register/RegisterForm";
 
-const page = () => {
-  // return <RegisterFrom />;
-  <div>h</div>;
-};
-
-export default page;
+export default function page() {
+  return (
+    <FormContentWrapper>
+      <RegisterForm />
+    </FormContentWrapper>
+  );
+}

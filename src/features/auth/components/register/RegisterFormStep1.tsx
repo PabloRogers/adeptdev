@@ -11,34 +11,42 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import FormSeparater from "@/features/auth/components/FormSeparater";
-import FormWrapper from "@/features/auth/components/FormWrapper";
 import GithubOAuth from "@/features/auth/components/GithubOAuth";
 import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
+import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { LogIn } from "react-feather";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
-export default function LoginForm() {
+export default function RegisterStep1() {
+  const multiStepForm = useMultiStepFormContext();
+
   const formSchema = z.object({
-    username: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
-    }),
+    email: z
+      .string()
+      .email({ message: "Invalid email address." })
+      .min(1, { message: "Email is required." }),
   });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      email: multiStepForm.getMultiFormData().email,
     },
   });
-  function onSubmit() {}
+
+  const onSubmit = () => {
+    multiStepForm.setMultiFormData({ email: form.getValues("email") });
+    multiStepForm.nextStep();
+  };
   return (
-    <FormWrapper>
+    <>
       <div className="grid gap-2 text-center">
-        <h1 className="text-3xl font-bold">Login</h1>
+        <h1 className="text-3xl font-bold">Create Your Account</h1>
         <p className="text-balance text-muted-foreground">
-          Enter your email and password below to login to your account
+          Register with social providers or email and password
         </p>
       </div>
       <div className="space-y-2">
@@ -50,7 +58,7 @@ export default function LoginForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
-            name="username"
+            name="email"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>
@@ -61,39 +69,19 @@ export default function LoginForm() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <div className="flex items-center">
-                  <FormLabel>Password</FormLabel>
-                  <Link
-                    href="/forgot-password"
-                    className="ml-auto inline-block text-sm underline"
-                  >
-                    Forgot your password?
-                  </Link>
-                </div>
-                <FormControl>
-                  <Input placeholder="Password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+
           <Button className="w-full" type="submit">
             <LogIn />
-            Login
+            Continue
           </Button>
           <div className="mt-4 text-muted-foreground text-center text-sm">
-            Don&apos;t have an account?{" "}
+            Already have an account?{" "}
             <Link href="/register" className="underline">
-              Register
+              Login
             </Link>
           </div>
         </form>
       </Form>
-    </FormWrapper>
+    </>
   );
 }

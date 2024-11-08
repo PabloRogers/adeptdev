@@ -1,3 +1,5 @@
+import { Card } from "@/components/ui/card";
+
 interface FormContentWrapperProps {
   children: React.ReactNode;
 }
@@ -6,13 +8,15 @@ export default function FormContentWrapper({
   children,
 }: FormContentWrapperProps) {
   return (
-    <div className="flex flex-col md:flex-row w-full h-screen">
-      <div className="hidden md:flex justify-center items-center w-full md:w-1/2">
-        image
-      </div>
-      <div className="flex justify-center items-center w-full md:w-1/2 p-10">
-        <div className="w-full h-full bg-card rounded-lg flex justify-center items-center">
-          {children}
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="flex flex-col lg:flex-row w-full h-screen max-w-[1400px]">
+        <div className="hidden lg:flex justify-center items-center w-full lg:w-1/2 h-full">
+          image
+        </div>
+        <div className="flex justify-center items-center h-full w-full lg:w-1/2 p-10">
+          <Card className="w-full h-full rounded-lg flex justify-center items-center">
+            {children}
+          </Card>
         </div>
       </div>
     </div>

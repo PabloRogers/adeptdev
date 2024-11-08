@@ -1,0 +1,89 @@
+"use client";
+
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+export default function RegisterFormStep3() {
+  const multiStepForm = useMultiStepFormContext();
+
+  const formSchema = z.object({
+    verificationPin: z.string().min(5, {
+      message: "Username must be at least 2 characters.",
+    }),
+  });
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      verificationPin: multiStepForm.getMultiFormData().verificationPin,
+    },
+  });
+
+  function onSubmit() {
+    multiStepForm.setMultiFormData({
+      verificationPin: form.getValues("verificationPin"),
+    });
+  }
+  return (
+    <div className="w-full flex flex-col items-center">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col items-center w-full space-y-6"
+        >
+          <FormField
+            control={form.control}
+            name="verificationPin"
+            render={({ field }) => (
+              <FormItem className="flex flex-col items-center w-full justify-center space-y-4">
+                <FormLabel>Verification Code</FormLabel>
+                <FormControl
+                  onChange={() => {
+                    multiStepForm.setMultiFormData({
+                      verificationPin: form.getValues("verificationPin"),
+                    });
+                  }}
+                >
+                  <InputOTP maxLength={6} {...field}>
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                      <InputOTPSlot index={3} />
+                      <InputOTPSlot index={4} />
+                      <InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                  </InputOTP>
+                </FormControl>
+                <FormDescription className="text-center">
+                  Please enter the verification code sent to your email.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* <Button className="w-full" type="submit">
+            <LogIn />
+            Continue
+          </Button> */}
+        </form>
+      </Form>
+    </div>
+  );
+}
