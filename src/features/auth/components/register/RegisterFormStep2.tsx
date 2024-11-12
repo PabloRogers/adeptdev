@@ -62,6 +62,8 @@ export default function RegisterStep2() {
       await signUp.create({
         emailAddress: multiStepForm.getMultiFormData().email,
         password: data.confirmPassword,
+        firstName: data.firstName,
+        lastName: data.lastName,
       });
 
       await signUp.prepareEmailAddressVerification({

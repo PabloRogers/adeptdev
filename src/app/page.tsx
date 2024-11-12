@@ -6,7 +6,10 @@ export default async function Home() {
 
   return (
     <div>
-      {user?.firstName && <h1>Hello, {user.firstName}</h1>}
+      <h1>
+        Hello, {user?.firstName} {user?.lastName}
+      </h1>
+
       <SignOutButton />
     </div>
   );
