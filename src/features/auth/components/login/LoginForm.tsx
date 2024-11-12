@@ -14,25 +14,71 @@ import FormSeparater from "@/features/auth/components/FormSeparater";
 import FormWrapper from "@/features/auth/components/FormWrapper";
 import GithubOAuth from "@/features/auth/components/GithubOAuth";
 import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
+import { useSignIn } from "@clerk/nextjs";
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 import { LogIn } from "react-feather";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 export default function LoginForm() {
   const formSchema = z.object({
-    username: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
+    email: z.string().email(),
+    password: z.string().min(6, {
+      message: "Password must be at least 6 characters.",
     }),
   });
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      email: "",
+      password: "",
     },
   });
-  function onSubmit() {}
+
+  const { isLoaded, signIn, setActive } = useSignIn();
+  const [isloading, setIsLoading] = useState(false);
+
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    if (!isLoaded) {
+      return;
+    }
+
+    try {
+      const signInAttempt = await signIn.create({
+        identifier: data.email,
+        password: data.password,
+      });
+
+      // If sign-in process is complete, set the created session as active
+      // and redirect the user
+
+      if (signInAttempt.status === "complete") {
+        await setActive({ session: signInAttempt.createdSessionId });
+      } else {
+        // If the status is not complete, check why. User may need to
+        // complete further steps.
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    } catch (err: any) {
+      if (isClerkAPIResponseError(err)) {
+        switch (err.errors[0].code) {
+          default:
+            toast.error(err.errors[0].longMessage);
+            break;
+        }
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    }
+    setIsLoading(false);
+  }
+
   return (
     <FormWrapper>
       <div className="grid gap-2 text-center">
@@ -50,7 +96,7 @@ export default function LoginForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
-            name="username"
+            name="email"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>
@@ -63,7 +109,7 @@ export default function LoginForm() {
           />
           <FormField
             control={form.control}
-            name="username"
+            name="password"
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center">
@@ -82,10 +128,13 @@ export default function LoginForm() {
               </FormItem>
             )}
           />
-          <Button className="w-full" type="submit">
-            <LogIn />
+
+          <Button className="w-full" type="submit" disabled={isloading}>
+            {isloading && <Loader2 className="animate-spin" />}
+            {!isloading && <LogIn />}
             Login
           </Button>
+
           <div className="mt-4 text-muted-foreground text-center text-sm">
             Don&apos;t have an account?{" "}
             <Link href="/register" className="underline">

@@ -11,13 +11,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
+import { useSignUp } from "@clerk/nextjs";
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LogIn } from "react-feather";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 export default function RegisterStep2() {
   const multiStepForm = useMultiStepFormContext();
+  const { isLoaded, signUp } = useSignUp();
 
   const formSchema = z.object({
     firstName: z.string().min(2, {
@@ -44,14 +48,39 @@ export default function RegisterStep2() {
     },
   });
 
-  function onSubmit() {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     multiStepForm.setMultiFormData({
       firstName: form.getValues("firstName"),
       lastName: form.getValues("lastName"),
       password: form.getValues("password"),
       confirmPassword: form.getValues("confirmPassword"),
     });
-    multiStepForm.nextStep();
+
+    if (!isLoaded) return;
+
+    try {
+      await signUp.create({
+        emailAddress: multiStepForm.getMultiFormData().email,
+        password: data.confirmPassword,
+      });
+
+      await signUp.prepareEmailAddressVerification({
+        strategy: "email_code",
+      });
+
+      toast.info("A verification code has been sent to your email address.");
+      multiStepForm.nextStep();
+    } catch (err) {
+      if (isClerkAPIResponseError(err)) {
+        switch (err.errors[0].code) {
+          default:
+            toast.error(err.errors[0].longMessage);
+            break;
+        }
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    }
   }
 
   return (

@@ -15,12 +15,16 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
+import { useSignUp } from "@clerk/nextjs";
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 export default function RegisterFormStep3() {
   const multiStepForm = useMultiStepFormContext();
+  const { isLoaded, signUp, setActive } = useSignUp();
 
   const formSchema = z.object({
     verificationPin: z.string().min(5, {
@@ -34,10 +38,39 @@ export default function RegisterFormStep3() {
     },
   });
 
-  function onSubmit() {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     multiStepForm.setMultiFormData({
       verificationPin: form.getValues("verificationPin"),
     });
+
+    if (!isLoaded) return;
+
+    try {
+      // Use the code the user provided to attempt verification
+      const signUpAttempt = await signUp.attemptEmailAddressVerification({
+        code: data.verificationPin,
+      });
+
+      // If verification was completed, set the session to active
+      // and redirect the user
+      if (signUpAttempt.status === "complete") {
+        await setActive({ session: signUpAttempt.createdSessionId });
+      } else {
+        // If the status is not complete, check why. User may need to
+        // complete further steps.
+        toast.error("Status is not complete. Please try again.");
+      }
+    } catch (err) {
+      if (isClerkAPIResponseError(err)) {
+        switch (err.errors[0].code) {
+          default:
+            toast.error(err.errors[0].longMessage);
+            break;
+        }
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    }
   }
   return (
     <div className="w-full flex flex-col items-center">

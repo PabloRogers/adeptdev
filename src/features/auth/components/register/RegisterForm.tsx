@@ -11,6 +11,7 @@ import MultiStepFormWrapper from "../MultiStepFormWrapper";
 export default function RegisterForm() {
   const multiStepForm = useMultiStepForm();
 
+  // make a state in useMutliStepForm to store the steps
   useEffect(() => {
     const steps = [
       <RegisterFormStep1 key="step1" />,

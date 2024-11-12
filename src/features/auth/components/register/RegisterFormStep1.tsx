@@ -14,14 +14,18 @@ import FormSeparater from "@/features/auth/components/FormSeparater";
 import GithubOAuth from "@/features/auth/components/GithubOAuth";
 import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
+import { useSignUp } from "@clerk/nextjs";
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { LogIn } from "react-feather";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 export default function RegisterStep1() {
   const multiStepForm = useMultiStepFormContext();
+  const { isLoaded, signUp } = useSignUp();
 
   const formSchema = z.object({
     email: z
@@ -37,9 +41,27 @@ export default function RegisterStep1() {
     },
   });
 
-  const onSubmit = () => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     multiStepForm.setMultiFormData({ email: form.getValues("email") });
-    multiStepForm.nextStep();
+
+    if (!isLoaded) return;
+
+    try {
+      await signUp.create({
+        emailAddress: data.email,
+      });
+      multiStepForm.nextStep();
+    } catch (err) {
+      if (isClerkAPIResponseError(err)) {
+        switch (err.errors[0].code) {
+          default:
+            toast.error(err.errors[0].longMessage);
+            break;
+        }
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    }
   };
   return (
     <>
@@ -76,7 +98,7 @@ export default function RegisterStep1() {
           </Button>
           <div className="mt-4 text-muted-foreground text-center text-sm">
             Already have an account?{" "}
-            <Link href="/register" className="underline">
+            <Link href="/login" className="underline">
               Login
             </Link>
           </div>
