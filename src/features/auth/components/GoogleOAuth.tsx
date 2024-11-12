@@ -63,9 +63,11 @@ export default function GoogleOAuth() {
   }
 
   if (!signIn || !signUp) {
-    <Button variant="outline" className="w-full" disabled>
-      <FcGoogle className="mr-2 h-5 w-5" /> Sign in with Google
-    </Button>;
+    return (
+      <Button variant="outline" className="w-full" disabled>
+        <FcGoogle className="mr-2 h-5 w-5" /> Sign in with Google
+      </Button>
+    );
   }
 
   return (
@@ -80,7 +82,7 @@ export default function GoogleOAuth() {
     >
       {isLoading && <Loader2 className="animate-spin" />}
       {!isLoading && <FcGoogle className="mr-2 h-5 w-5" />}
-      Sign in with GitHub
+      Sign in with Google
     </Button>
   );
 }
