@@ -18,6 +18,7 @@ import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import { useSignUp } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -72,6 +73,16 @@ export default function RegisterFormStep3() {
       }
     }
   }
+
+  useEffect(() => {
+    const { unsubscribe } = form.watch((value) => {
+      if (value.verificationPin?.length === 6) {
+        form.handleSubmit(onSubmit)();
+      }
+    });
+    return () => unsubscribe();
+  }, [form.watch]);
+
   return (
     <div className="w-full flex flex-col items-center">
       <Form {...form}>
