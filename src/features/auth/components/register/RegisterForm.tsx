@@ -6,10 +6,20 @@ import RegisterFormStep3 from "@/features/auth/components/register/RegisterFormS
 import { MultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import useMultiStepForm from "@/features/auth/hooks/useMultiStepForm"; // Adjust the import path as necessary
 import { useEffect } from "react";
+import { TRegisterFormData } from "../../types";
 import MultiStepFormWrapper from "../MultiStepFormWrapper";
 
 export default function RegisterForm() {
-  const multiStepForm = useMultiStepForm();
+  const initialFormData: TRegisterFormData = {
+    email: "",
+    firstName: "",
+    lastName: "",
+    password: "",
+    confirmPassword: "",
+    verificationPin: "",
+  };
+
+  const multiStepForm = useMultiStepForm<TRegisterFormData>(initialFormData);
 
   // make a state in useMutliStepForm to store the steps
   useEffect(() => {

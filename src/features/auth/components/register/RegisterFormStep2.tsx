@@ -18,33 +18,14 @@ import { LogIn } from "react-feather";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { TRegisterFormStep2Schema } from "../../types";
 
 export default function RegisterStep2() {
   const multiStepForm = useMultiStepFormContext();
   const { isLoaded, signUp } = useSignUp();
 
-  const formSchema = z
-    .object({
-      firstName: z.string().min(2, {
-        message: "First name must be at least 2 characters.",
-      }),
-      lastName: z.string().min(2, {
-        message: "Last name must be at least 2 characters.",
-      }),
-      password: z.string().min(6, {
-        message: "Password must be at least 6 characters.",
-      }),
-      confirmPassword: z.string().min(6, {
-        message: "Password must be at least 6 characters.",
-      }),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: "Passwords do not match.",
-      path: ["confirmPassword"],
-    });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof TRegisterFormStep2Schema>>({
+    resolver: zodResolver(TRegisterFormStep2Schema),
     defaultValues: {
       firstName: multiStepForm.getMultiFormData().firstName,
       lastName: multiStepForm.getMultiFormData().lastName,
@@ -53,7 +34,7 @@ export default function RegisterStep2() {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof TRegisterFormStep2Schema>) {
     multiStepForm.setMultiFormData({
       firstName: form.getValues("firstName"),
       lastName: form.getValues("lastName"),

@@ -22,26 +22,20 @@ import { LogIn } from "react-feather";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { TRegisterFormStep1Schema } from "../../types";
 
 export default function RegisterStep1() {
   const multiStepForm = useMultiStepFormContext();
   const { isLoaded, signUp } = useSignUp();
 
-  const formSchema = z.object({
-    email: z
-      .string()
-      .email({ message: "Invalid email address." })
-      .min(1, { message: "Email is required." }),
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof TRegisterFormStep1Schema>>({
+    resolver: zodResolver(TRegisterFormStep1Schema),
     defaultValues: {
       email: multiStepForm.getMultiFormData().email,
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof TRegisterFormStep1Schema>) => {
     multiStepForm.setMultiFormData({ email: form.getValues("email") });
 
     if (!isLoaded) return;

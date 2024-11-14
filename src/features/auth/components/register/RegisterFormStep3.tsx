@@ -15,6 +15,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
+import { TRegisterFormStep3Schema } from "@/features/auth/types";
 import { useSignUp } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,19 +28,14 @@ export default function RegisterFormStep3() {
   const multiStepForm = useMultiStepFormContext();
   const { isLoaded, signUp, setActive } = useSignUp();
 
-  const formSchema = z.object({
-    verificationPin: z.string().min(5, {
-      message: "Username must be at least 2 characters.",
-    }),
-  });
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof TRegisterFormStep3Schema>>({
+    resolver: zodResolver(TRegisterFormStep3Schema),
     defaultValues: {
       verificationPin: multiStepForm.getMultiFormData().verificationPin,
     },
   });
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof TRegisterFormStep3Schema>) {
     multiStepForm.setMultiFormData({
       verificationPin: form.getValues("verificationPin"),
     });
