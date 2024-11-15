@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import FormSeparater from "@/features/auth/components/FormSeparater";
+import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import GithubOAuth from "@/features/auth/components/GithubOAuth";
 import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
 import { useSignIn } from "@clerk/nextjs";
@@ -19,7 +20,6 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import FormSubmitButton from "../FormSubmitButton";
 
 export default function LoginForm() {
   const formSchema = z.object({

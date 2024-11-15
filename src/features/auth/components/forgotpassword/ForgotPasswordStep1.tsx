@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import {
   TForgotPasswordFormData,
@@ -21,7 +22,6 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import FormSubmitButton from "../FormSubmitButton";
 
 export default function ForgotPasswordStep1() {
   const { isLoaded, signIn } = useSignIn();

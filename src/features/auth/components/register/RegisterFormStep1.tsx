@@ -10,9 +10,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import FormSeparater from "@/features/auth/components/FormSeparater";
+import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import GithubOAuth from "@/features/auth/components/GithubOAuth";
 import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
+import {
+  TRegisterFormData,
+  TRegisterFormStep1Schema,
+} from "@/features/auth/types";
 import { useSignUp } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,8 +25,6 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { TRegisterFormData, TRegisterFormStep1Schema } from "../../types";
-import FormSubmitButton from "../FormSubmitButton";
 
 export default function RegisterStep1() {
   const multiStepForm = useMultiStepFormContext<TRegisterFormData>();

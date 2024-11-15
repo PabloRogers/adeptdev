@@ -1,13 +1,13 @@
 "use client";
 
-import RegisterFormStep1 from "@/features/auth/components/register/RegisterFormStep1"; // Adjust the import path as necessary
+import MultiStepFormWrapper from "@/features/auth/components/MultiStepFormWrapper";
+import RegisterFormStep1 from "@/features/auth/components/register/RegisterFormStep1";
 import RegisterFormStep2 from "@/features/auth/components/register/RegisterFormStep2";
 import RegisterFormStep3 from "@/features/auth/components/register/RegisterFormStep3";
 import { MultiStepFormContext } from "@/features/auth/context/MultiStepForm";
-import useMultiStepForm from "@/features/auth/hooks/useMultiStepForm"; // Adjust the import path as necessary
+import useMultiStepForm from "@/features/auth/hooks/useMultiStepForm";
+import { TRegisterFormData } from "@/features/auth/types";
 import { useEffect } from "react";
-import { TRegisterFormData } from "../../types";
-import MultiStepFormWrapper from "../MultiStepFormWrapper";
 
 export default function RegisterForm() {
   const initialFormData: TRegisterFormData = {

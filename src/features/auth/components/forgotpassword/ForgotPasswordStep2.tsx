@@ -14,6 +14,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import {
   TForgotPasswordFormData,
@@ -23,7 +24,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import FormSubmitButton from "../FormSubmitButton";
 
 export default function ForgotPasswordStep2() {
   const multiStepForm = useMultiStepFormContext<TForgotPasswordFormData>();
