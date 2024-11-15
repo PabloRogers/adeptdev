@@ -21,7 +21,6 @@ import {
   TForgotPasswordFormStep2Schema,
 } from "@/features/auth/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -44,15 +43,6 @@ export default function ForgotPasswordStep2() {
 
     multiStepForm.nextStep();
   }
-
-  useEffect(() => {
-    const { unsubscribe } = form.watch((value) => {
-      if (value.verificationPin?.length === 6) {
-        form.handleSubmit(onSubmit)();
-      }
-    });
-    return () => unsubscribe();
-  }, [form.watch]);
 
   return (
     <>
