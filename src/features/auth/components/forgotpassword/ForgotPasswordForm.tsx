@@ -5,8 +5,8 @@ import ForgotPasswordStep2 from "@/features/auth/components/forgotpassword/Forgo
 import ForgotPasswordStep3 from "@/features/auth/components/forgotpassword/ForgotPasswordStep3";
 import MultiStepFormWrapper from "@/features/auth/components/MultiStepFormWrapper";
 import { MultiStepFormContext } from "@/features/auth/context/MultiStepForm";
-import useMultiStepForm from "@/features/auth/hooks/useMultiStepForm";
 import { TForgotPasswordFormData } from "@/features/auth/types";
+import useMultiStepForm from "@/hooks/useMultiStepForm";
 import { useEffect } from "react";
 
 export default function ForgotPasswordFrom() {
