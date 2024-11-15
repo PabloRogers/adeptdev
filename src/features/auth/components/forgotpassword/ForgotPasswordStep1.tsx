@@ -9,67 +9,67 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import FormSeparater from "@/features/auth/components/FormSeparater";
-import GithubOAuth from "@/features/auth/components/GithubOAuth";
-import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
-import { useSignUp } from "@clerk/nextjs";
+import {
+  TForgotPasswordFormData,
+  TForgotPasswordFormStep1Schema,
+} from "@/features/auth/types";
+import { useSignIn } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { TRegisterFormData, TRegisterFormStep1Schema } from "../../types";
 import FormSubmitButton from "../FormSubmitButton";
 
-export default function RegisterStep1() {
-  const multiStepForm = useMultiStepFormContext<TRegisterFormData>();
+export default function ForgotPasswordStep1() {
+  const { isLoaded, signIn } = useSignIn();
 
-  const { isLoaded, signUp } = useSignUp();
+  const multiStepForm = useMultiStepFormContext<TForgotPasswordFormData>();
 
-  const form = useForm<z.infer<typeof TRegisterFormStep1Schema>>({
-    resolver: zodResolver(TRegisterFormStep1Schema),
+  const form = useForm<z.infer<typeof TForgotPasswordFormStep1Schema>>({
+    resolver: zodResolver(TForgotPasswordFormStep1Schema),
     defaultValues: {
       email: multiStepForm.getMultiFormData().email,
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof TRegisterFormStep1Schema>) => {
-    multiStepForm.setMultiFormData({ email: form.getValues("email") });
+  const onSubmit = async (
+    data: z.infer<typeof TForgotPasswordFormStep1Schema>,
+  ) => {
+    multiStepForm.setMultiFormData({ email: data.email });
 
-    if (!isLoaded) return;
-
-    try {
-      await signUp.create({
-        emailAddress: data.email,
-      });
-      multiStepForm.nextStep();
-    } catch (err) {
-      if (isClerkAPIResponseError(err)) {
-        switch (err.errors[0].code) {
-          default:
-            toast.error(err.errors[0].longMessage);
-            break;
+    await signIn
+      ?.create({
+        strategy: "reset_password_email_code",
+        identifier: form.getValues("email"),
+      })
+      .then(() => {
+        toast.info("Check your email for the reset code.");
+        multiStepForm.nextStep();
+      })
+      .catch((err) => {
+        if (isClerkAPIResponseError(err)) {
+          switch (err.errors[0].code) {
+            default:
+              toast.error(err.errors[0].code);
+              break;
+          }
+        } else {
+          toast.error("An unexpected error occurred. Please try again.");
         }
-      } else {
-        toast.error("An unexpected error occurred. Please try again.");
-      }
-    }
+      });
   };
+
   return (
     <>
       <div className="grid gap-2 text-center">
-        <h1 className="text-3xl font-bold">Create Your Account</h1>
+        <h1 className="text-3xl font-bold">Forgot Password</h1>
         <p className="text-balance text-muted-foreground">
-          Register with social providers or email and password
+          Enter your email address to reset your password.
         </p>
       </div>
-      <div className="space-y-2">
-        <GithubOAuth />
-        <GoogleOAuth />
-      </div>
-      <FormSeparater />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField

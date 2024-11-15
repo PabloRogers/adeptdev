@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-export interface TForgotPasswordFormData {
+export type TForgotPasswordFormData = {
   email: string;
   verificationPin: string;
   password: string;
   confirmPassword: string;
-}
+};
 export const TForgotPasswordFormStep1Schema = z.object({
   email: z
     .string()

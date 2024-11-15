@@ -16,65 +16,52 @@ import {
 } from "@/components/ui/input-otp";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import {
-  TRegisterFormData,
-  TRegisterFormStep3Schema,
+  TForgotPasswordFormData,
+  TForgotPasswordFormStep2Schema,
 } from "@/features/auth/types";
-import { useSignUp } from "@clerk/nextjs";
-import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 import FormSubmitButton from "../FormSubmitButton";
 
-export default function RegisterFormStep3() {
-  const multiStepForm = useMultiStepFormContext<TRegisterFormData>();
-  const { isLoaded, signUp, setActive } = useSignUp();
+export default function ForgotPasswordStep2() {
+  const multiStepForm = useMultiStepFormContext<TForgotPasswordFormData>();
 
-  const form = useForm<z.infer<typeof TRegisterFormStep3Schema>>({
-    resolver: zodResolver(TRegisterFormStep3Schema),
+  const form = useForm<z.infer<typeof TForgotPasswordFormStep2Schema>>({
+    resolver: zodResolver(TForgotPasswordFormStep2Schema),
     defaultValues: {
       verificationPin: multiStepForm.getMultiFormData().verificationPin,
     },
   });
 
-  async function onSubmit(data: z.infer<typeof TRegisterFormStep3Schema>) {
+  async function onSubmit(
+    data: z.infer<typeof TForgotPasswordFormStep2Schema>,
+  ) {
     multiStepForm.setMultiFormData({
-      verificationPin: form.getValues("verificationPin"),
+      verificationPin: data.verificationPin,
     });
 
-    if (!isLoaded) return;
-
-    try {
-      // Use the code the user provided to attempt verification
-      const signUpAttempt = await signUp.attemptEmailAddressVerification({
-        code: data.verificationPin,
-      });
-
-      // If verification was completed, set the session to active
-      // and redirect the user
-      if (signUpAttempt.status === "complete") {
-        await setActive({ session: signUpAttempt.createdSessionId });
-      } else {
-        // If the status is not complete, check why. User may need to
-        // complete further steps.
-        toast.error("Status is not complete. Please try again.");
-      }
-    } catch (err) {
-      if (isClerkAPIResponseError(err)) {
-        switch (err.errors[0].code) {
-          default:
-            toast.error(err.errors[0].longMessage);
-            break;
-        }
-      } else {
-        toast.error("An unexpected error occurred. Please try again.");
-      }
-    }
+    multiStepForm.nextStep();
   }
 
+  useEffect(() => {
+    const { unsubscribe } = form.watch((value) => {
+      if (value.verificationPin?.length === 6) {
+        form.handleSubmit(onSubmit)();
+      }
+    });
+    return () => unsubscribe();
+  }, [form.watch]);
+
   return (
-    <div className="w-full flex flex-col items-center">
+    <>
+      <div className="grid gap-2 text-center">
+        <h1 className="text-3xl font-bold">Forgot Password</h1>
+        <p className="text-balance text-muted-foreground">
+          Enter your email address to reset your password.
+        </p>
+      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -112,14 +99,11 @@ export default function RegisterFormStep3() {
             )}
           />
 
-          <FormSubmitButton
-            disabled={isLoaded}
-            isloading={form.formState.isSubmitting}
-          >
+          <FormSubmitButton isloading={form.formState.isLoading}>
             Continue
           </FormSubmitButton>
         </form>
       </Form>
-    </div>
+    </>
   );
 }

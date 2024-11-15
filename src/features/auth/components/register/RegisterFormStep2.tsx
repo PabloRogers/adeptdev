@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -11,17 +10,20 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
+import {
+  TRegisterFormData,
+  TRegisterFormStep2Schema,
+} from "@/features/auth/types";
 import { useSignUp } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LogIn } from "react-feather";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { TRegisterFormStep2Schema } from "../../types";
+import FormSubmitButton from "../FormSubmitButton";
 
 export default function RegisterStep2() {
-  const multiStepForm = useMultiStepFormContext();
+  const multiStepForm = useMultiStepFormContext<TRegisterFormData>();
   const { isLoaded, signUp } = useSignUp();
 
   const form = useForm<z.infer<typeof TRegisterFormStep2Schema>>({
@@ -158,10 +160,12 @@ export default function RegisterStep2() {
               </FormItem>
             )}
           />
-          <Button className="w-full" type="submit">
-            <LogIn />
+          <FormSubmitButton
+            disabled={isLoaded}
+            isloading={form.formState.isSubmitting}
+          >
             Continue
-          </Button>
+          </FormSubmitButton>
         </form>
       </Form>
     </>

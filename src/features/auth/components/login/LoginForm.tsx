@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -11,19 +10,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import FormSeparater from "@/features/auth/components/FormSeparater";
-import FormWrapper from "@/features/auth/components/FormWrapper";
 import GithubOAuth from "@/features/auth/components/GithubOAuth";
 import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
 import { useSignIn } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
-import { LogIn } from "react-feather";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import FormSubmitButton from "../FormSubmitButton";
 
 export default function LoginForm() {
   const formSchema = z.object({
@@ -41,10 +37,8 @@ export default function LoginForm() {
   });
 
   const { isLoaded, signIn, setActive } = useSignIn();
-  const [isloading, setIsLoading] = useState(false);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsLoading(true);
     if (!isLoaded) {
       return;
     }
@@ -76,11 +70,10 @@ export default function LoginForm() {
         toast.error("An unexpected error occurred. Please try again.");
       }
     }
-    setIsLoading(false);
   }
 
   return (
-    <FormWrapper>
+    <>
       <div className="grid gap-2 text-center">
         <h1 className="text-3xl font-bold">Login</h1>
         <p className="text-balance text-muted-foreground">
@@ -115,7 +108,7 @@ export default function LoginForm() {
                 <div className="flex items-center">
                   <FormLabel>Password</FormLabel>
                   <Link
-                    href="/forgot-password"
+                    href="/forgotpassword"
                     className="ml-auto inline-block text-sm underline"
                   >
                     Forgot your password?
@@ -129,11 +122,12 @@ export default function LoginForm() {
             )}
           />
 
-          <Button className="w-full" type="submit" disabled={isloading}>
-            {isloading && <Loader2 className="animate-spin" />}
-            {!isloading && <LogIn />}
+          <FormSubmitButton
+            disabled={isLoaded}
+            isloading={form.formState.isSubmitting}
+          >
             Login
-          </Button>
+          </FormSubmitButton>
 
           <div className="mt-4 text-muted-foreground text-center text-sm">
             Don&apos;t have an account?{" "}
@@ -143,6 +137,6 @@ export default function LoginForm() {
           </div>
         </form>
       </Form>
-    </FormWrapper>
+    </>
   );
 }

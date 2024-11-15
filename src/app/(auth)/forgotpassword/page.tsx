@@ -1,8 +1,10 @@
-// import { ForgotPassword } from "@/features/auth/components/forgotpassword/ForgotPassword";
+import FormContentWrapper from "@/features/auth/components/FormContentWrapper";
+import ForgotPasswordForm from "@/features/auth/components/forgotpassword/ForgotPasswordForm";
 
-function Page() {
-  // return <ForgotPassword />;
-  <div>h</div>;
+export default function page() {
+  return (
+    <FormContentWrapper>
+      <ForgotPasswordForm />
+    </FormContentWrapper>
+  );
 }
-
-export default Page;

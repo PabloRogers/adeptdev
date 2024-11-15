@@ -2,11 +2,13 @@ import { createContext, useContext } from "react";
 import { TUseMultiStepFormReturn } from "../hooks/useMultiStepForm";
 
 export const MultiStepFormContext = createContext<
-  TUseMultiStepFormReturn | undefined
+  TUseMultiStepFormReturn<unknown> | undefined
 >(undefined);
 
-export function useMultiStepFormContext() {
-  const multiStepForm = useContext(MultiStepFormContext);
+export function useMultiStepFormContext<T>() {
+  const multiStepForm = useContext(MultiStepFormContext) as
+    | TUseMultiStepFormReturn<T>
+    | undefined;
 
   if (multiStepForm === undefined) {
     throw new Error(

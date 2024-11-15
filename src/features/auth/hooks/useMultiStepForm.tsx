@@ -1,40 +1,27 @@
-import { ReactElement, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
-interface TRegisterFormData {
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  confirmPassword: string;
-  verificationPin: string;
-}
-
-export interface TUseMultiStepFormReturn {
+export interface TUseMultiStepFormReturn<T> {
   currentStepIndex: number;
-  step: ReactElement | null;
+  steps: React.ReactElement[];
+  step: React.ReactElement;
+  formData: T;
   isFirstStep: boolean;
   isLastStep: boolean;
   length: number;
-
   goTo: (index: number) => void;
   nextStep: () => void;
   backStep: () => void;
-  setSteps: (steps: ReactElement[]) => void;
-  setMultiFormData: (newFormData: Partial<TRegisterFormData>) => void;
-  getMultiFormData: () => TRegisterFormData;
+  setSteps: (newSteps: React.ReactElement[]) => void;
+  setMultiFormData: (newFormData: Partial<T>) => void;
+  getMultiFormData: () => T;
 }
 
-export default function useMultiStepForm(): TUseMultiStepFormReturn {
+export default function useMultiStepForm<T>(
+  initialFormData: T,
+): TUseMultiStepFormReturn<T> {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [steps, setStepsState] = useState<ReactElement[]>([]);
-  const [formData, setFormData] = useState<TRegisterFormData>({
-    email: "",
-    firstName: "",
-    lastName: "",
-    password: "",
-    confirmPassword: "",
-    verificationPin: "",
-  });
+  const [steps, setStepsState] = useState<React.ReactElement[]>([]);
+  const [formData, setFormData] = useState<T>(initialFormData);
 
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === steps.length - 1;
@@ -47,39 +34,25 @@ export default function useMultiStepForm(): TUseMultiStepFormReturn {
     setCurrentStepIndex((index) => (isFirstStep ? index : index - 1));
   }, [isFirstStep]);
 
-  const goTo = useCallback(
-    (index: number) => {
-      setCurrentStepIndex((prevIndex) =>
-        index < 0 || index >= steps.length ? prevIndex : index,
-      );
-    },
-    [steps.length],
-  );
-
-  const getMultiFormData = useCallback(() => {
-    return formData;
-  }, [formData]);
-
-  const setMultiFormData = useCallback(
-    (newFormData: Partial<typeof formData>) => {
-      setFormData((prevData) => ({
-        ...prevData,
-        ...newFormData,
-      }));
-    },
-    [],
-  );
-
-  const setSteps = useCallback((newSteps: ReactElement[]) => {
-    setStepsState(newSteps);
-    setCurrentStepIndex((prevIndex) =>
-      prevIndex >= newSteps.length ? newSteps.length - 1 : prevIndex,
-    );
+  const goTo = useCallback((index: number) => {
+    setCurrentStepIndex(index);
   }, []);
+
+  const setSteps = useCallback((newSteps: React.ReactElement[]) => {
+    setStepsState(newSteps);
+  }, []);
+
+  const setMultiFormData = useCallback((newFormData: Partial<T>) => {
+    setFormData((prevFormData) => ({ ...prevFormData, ...newFormData }));
+  }, []);
+
+  const getMultiFormData = useCallback(() => formData, [formData]);
 
   return {
     currentStepIndex,
-    step: steps[currentStepIndex] || null,
+    steps,
+    step: steps[currentStepIndex],
+    formData,
     isFirstStep,
     isLastStep,
     length: steps.length,
