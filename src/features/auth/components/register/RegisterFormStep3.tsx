@@ -14,6 +14,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import FormHeader from "@/features/auth/components/FormHeader";
 import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import {
@@ -75,6 +76,12 @@ export default function RegisterFormStep3() {
 
   return (
     <div className="w-full flex flex-col items-center">
+      <FormHeader>
+        <FormHeader.MainHeader>Verify Your Email</FormHeader.MainHeader>
+        <FormHeader.SubHeader>
+          Enter the verification code sent to your email
+        </FormHeader.SubHeader>
+      </FormHeader>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

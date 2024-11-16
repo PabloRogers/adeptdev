@@ -21,6 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import FormHeader from "../FormHeader";
 
 export default function ForgotPasswordStep3() {
   const { isLoaded, signIn, setActive } = useSignIn();
@@ -80,12 +81,12 @@ export default function ForgotPasswordStep3() {
 
   return (
     <>
-      <div className="grid gap-2 text-center">
-        <h1 className="text-3xl font-bold">Forgot Password</h1>
-        <p className="text-balance text-muted-foreground">
-          Enter your email address to reset your password.
-        </p>
-      </div>
+      <FormHeader>
+        <FormHeader.MainHeader>Forgot Password</FormHeader.MainHeader>
+        <FormHeader.SubHeader>
+          Enter your email to reset your password
+        </FormHeader.SubHeader>
+      </FormHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField

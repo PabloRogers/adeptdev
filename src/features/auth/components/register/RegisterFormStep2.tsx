@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import FormHeader from "@/features/auth/components/FormHeader";
 import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import {
@@ -75,13 +76,12 @@ export default function RegisterStep2() {
 
   return (
     <>
-      <div className="grid gap-2 text-center">
-        <h1 className="text-3xl font-bold">Personal Information</h1>
-        <p className="text-balance text-muted-foreground">
-          Please enter your personal information and create a password.
-        </p>
-      </div>
-
+      <FormHeader>
+        <FormHeader.MainHeader>Register</FormHeader.MainHeader>
+        <FormHeader.SubHeader>
+          Enter your name and password to register
+        </FormHeader.SubHeader>
+      </FormHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="flex space-x-2">

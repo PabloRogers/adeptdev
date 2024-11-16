@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import FormHeader from "@/features/auth/components/FormHeader";
 import FormSeparater from "@/features/auth/components/FormSeparater";
 import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import GithubOAuth from "@/features/auth/components/GithubOAuth";
@@ -62,12 +63,12 @@ export default function RegisterStep1() {
   };
   return (
     <>
-      <div className="grid gap-2 text-center">
-        <h1 className="text-3xl font-bold">Create Your Account</h1>
-        <p className="text-balance text-muted-foreground">
+      <FormHeader>
+        <FormHeader.MainHeader>Create Your Accoutn</FormHeader.MainHeader>
+        <FormHeader.SubHeader>
           Register with social providers or email and password
-        </p>
-      </div>
+        </FormHeader.SubHeader>
+      </FormHeader>
       <div className="space-y-2">
         <GithubOAuth />
         <GoogleOAuth />

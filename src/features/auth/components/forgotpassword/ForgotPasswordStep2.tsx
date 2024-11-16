@@ -14,6 +14,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import FormHeader from "@/features/auth/components/FormHeader";
 import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import {
@@ -46,12 +47,12 @@ export default function ForgotPasswordStep2() {
 
   return (
     <>
-      <div className="grid gap-2 text-center">
-        <h1 className="text-3xl font-bold">Forgot Password</h1>
-        <p className="text-balance text-muted-foreground">
-          Enter your email address to reset your password.
-        </p>
-      </div>
+      <FormHeader>
+        <FormHeader.MainHeader>Forgot Password</FormHeader.MainHeader>
+        <FormHeader.SubHeader>
+          Enter your email to reset your password
+        </FormHeader.SubHeader>
+      </FormHeader>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import FormHeader from "../FormHeader";
 
 export default function LoginForm() {
   const formSchema = z.object({
@@ -74,12 +75,12 @@ export default function LoginForm() {
 
   return (
     <>
-      <div className="grid gap-2 text-center">
-        <h1 className="text-3xl font-bold">Login</h1>
-        <p className="text-balance text-muted-foreground">
-          Enter your email and password below to login to your account
-        </p>
-      </div>
+      <FormHeader>
+        <FormHeader.MainHeader>Login</FormHeader.MainHeader>
+        <FormHeader.SubHeader>
+          Enter your email and password below to login to your
+        </FormHeader.SubHeader>
+      </FormHeader>
       <div className="space-y-2">
         <GithubOAuth />
         <GoogleOAuth />
