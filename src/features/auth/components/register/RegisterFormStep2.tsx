@@ -15,7 +15,7 @@ import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import {
   TRegisterFormData,
   TRegisterFormStep2Schema,
-} from "@/features/auth/types";
+} from "@/features/auth/types/register";
 import { useSignUp } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";

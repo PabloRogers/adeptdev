@@ -14,7 +14,7 @@ import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import {
   TForgotPasswordFormData,
   TForgotPasswordFormStep3Schema,
-} from "@/features/auth/types";
+} from "@/features/auth/types/forgotpassword";
 import { useSignIn } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";

@@ -20,7 +20,7 @@ import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import {
   TForgotPasswordFormData,
   TForgotPasswordFormStep2Schema,
-} from "@/features/auth/types";
+} from "@/features/auth/types/forgotpassword";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";

@@ -5,7 +5,7 @@ import RegisterFormStep1 from "@/features/auth/components/register/RegisterFormS
 import RegisterFormStep2 from "@/features/auth/components/register/RegisterFormStep2";
 import RegisterFormStep3 from "@/features/auth/components/register/RegisterFormStep3";
 import { MultiStepFormContext } from "@/features/auth/context/MultiStepForm";
-import { TRegisterFormData } from "@/features/auth/types";
+import { TRegisterFormData } from "@/features/auth/types/register";
 import useMultiStepForm from "@/hooks/useMultiStepForm";
 import { useEffect } from "react";
 
