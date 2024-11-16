@@ -18,7 +18,7 @@ import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import useForgotPassword from "@/features/auth/hooks/useForgotPassword";
 import {
-  ForgotPasswordFormData,
+  ForgotPasswordFormDataSchema,
   ForgotPasswordFormStep2Schema,
 } from "@/features/auth/types/forgotpassword";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,7 +27,7 @@ import { z } from "zod";
 
 export default function ForgotPasswordStep2() {
   const { handleStep2, isLoaded } = useForgotPassword();
-  const multiStepForm = useMultiStepFormContext<ForgotPasswordFormData>();
+  const multiStepForm = useMultiStepFormContext<ForgotPasswordFormDataSchema>();
 
   const form = useForm<z.infer<typeof ForgotPasswordFormStep2Schema>>({
     resolver: zodResolver(ForgotPasswordFormStep2Schema),
