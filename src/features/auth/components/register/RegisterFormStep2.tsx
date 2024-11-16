@@ -12,20 +12,18 @@ import { Input } from "@/components/ui/input";
 import FormHeader from "@/features/auth/components/FormHeader";
 import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
+import useRegister from "@/features/auth/hooks/useRegister";
 import {
   TRegisterFormData,
   TRegisterFormStep2Schema,
 } from "@/features/auth/types/register";
-import { useSignUp } from "@clerk/nextjs";
-import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import z from "zod";
 
 export default function RegisterStep2() {
+  const { handleStep2, isLoaded } = useRegister();
   const multiStepForm = useMultiStepFormContext<TRegisterFormData>();
-  const { isLoaded, signUp } = useSignUp();
 
   const form = useForm<z.infer<typeof TRegisterFormStep2Schema>>({
     resolver: zodResolver(TRegisterFormStep2Schema),
@@ -37,43 +35,6 @@ export default function RegisterStep2() {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof TRegisterFormStep2Schema>) {
-    multiStepForm.setMultiFormData({
-      firstName: form.getValues("firstName"),
-      lastName: form.getValues("lastName"),
-      password: form.getValues("password"),
-      confirmPassword: form.getValues("confirmPassword"),
-    });
-
-    if (!isLoaded) return;
-
-    try {
-      await signUp.create({
-        emailAddress: multiStepForm.getMultiFormData().email,
-        password: data.confirmPassword,
-        firstName: data.firstName,
-        lastName: data.lastName,
-      });
-
-      await signUp.prepareEmailAddressVerification({
-        strategy: "email_code",
-      });
-
-      toast.info("A verification code has been sent to your email address.");
-      multiStepForm.nextStep();
-    } catch (err) {
-      if (isClerkAPIResponseError(err)) {
-        switch (err.errors[0].code) {
-          default:
-            toast.error(err.errors[0].longMessage);
-            break;
-        }
-      } else {
-        toast.error("An unexpected error occurred. Please try again.");
-      }
-    }
-  }
-
   return (
     <>
       <FormHeader>
@@ -83,7 +44,7 @@ export default function RegisterStep2() {
         </FormHeader.SubHeader>
       </FormHeader>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(handleStep2)} className="space-y-4">
           <div className="flex space-x-2">
             <div className="w-full">
               <FormField

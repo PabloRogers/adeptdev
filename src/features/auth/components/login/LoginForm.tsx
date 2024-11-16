@@ -9,69 +9,27 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import FormHeader from "@/features/auth/components/FormHeader";
 import FormSeparater from "@/features/auth/components/FormSeparater";
 import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import GithubOAuth from "@/features/auth/components/GithubOAuth";
 import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
-import { useSignIn } from "@clerk/nextjs";
-import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
+import useLogin from "@/features/auth/hooks/useLogin";
+import LoginFormSchema from "@/features/auth/types/login";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import z from "zod";
-import FormHeader from "../FormHeader";
 
 export default function LoginForm() {
-  const formSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(6, {
-      message: "Password must be at least 6 characters.",
-    }),
-  });
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const { onSubmit, isLoaded } = useLogin();
+  const form = useForm<z.infer<typeof LoginFormSchema>>({
+    resolver: zodResolver(LoginFormSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
-
-  const { isLoaded, signIn, setActive } = useSignIn();
-
-  async function onSubmit(data: z.infer<typeof formSchema>) {
-    if (!isLoaded) {
-      return;
-    }
-
-    try {
-      const signInAttempt = await signIn.create({
-        identifier: data.email,
-        password: data.password,
-      });
-
-      // If sign-in process is complete, set the created session as active
-      // and redirect the user
-
-      if (signInAttempt.status === "complete") {
-        await setActive({ session: signInAttempt.createdSessionId });
-      } else {
-        // If the status is not complete, check why. User may need to
-        // complete further steps.
-        toast.error("An unexpected error occurred. Please try again.");
-      }
-    } catch (err: any) {
-      if (isClerkAPIResponseError(err)) {
-        switch (err.errors[0].code) {
-          default:
-            toast.error(err.errors[0].longMessage);
-            break;
-        }
-      } else {
-        toast.error("An unexpected error occurred. Please try again.");
-      }
-    }
-  }
 
   return (
     <>

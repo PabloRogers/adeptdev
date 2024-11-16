@@ -17,6 +17,7 @@ import {
 import FormHeader from "@/features/auth/components/FormHeader";
 import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
+import useForgotPassword from "@/features/auth/hooks/useForgotPassword";
 import {
   TForgotPasswordFormData,
   TForgotPasswordFormStep2Schema,
@@ -26,6 +27,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export default function ForgotPasswordStep2() {
+  const { handleStep2, isLoaded } = useForgotPassword();
   const multiStepForm = useMultiStepFormContext<TForgotPasswordFormData>();
 
   const form = useForm<z.infer<typeof TForgotPasswordFormStep2Schema>>({
@@ -34,16 +36,6 @@ export default function ForgotPasswordStep2() {
       verificationPin: multiStepForm.getMultiFormData().verificationPin,
     },
   });
-
-  async function onSubmit(
-    data: z.infer<typeof TForgotPasswordFormStep2Schema>,
-  ) {
-    multiStepForm.setMultiFormData({
-      verificationPin: data.verificationPin,
-    });
-
-    multiStepForm.nextStep();
-  }
 
   return (
     <>
@@ -55,7 +47,7 @@ export default function ForgotPasswordStep2() {
       </FormHeader>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(handleStep2)}
           className="flex flex-col items-center w-full space-y-6"
         >
           <FormField
@@ -90,7 +82,10 @@ export default function ForgotPasswordStep2() {
             )}
           />
 
-          <FormSubmitButton isloading={form.formState.isLoading}>
+          <FormSubmitButton
+            disabled={isLoaded}
+            isloading={form.formState.isLoading}
+          >
             Continue
           </FormSubmitButton>
         </form>

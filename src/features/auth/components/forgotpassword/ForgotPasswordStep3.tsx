@@ -9,23 +9,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import FormHeader from "@/features/auth/components/FormHeader";
 import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
+import useForgotPassword from "@/features/auth/hooks/useForgotPassword";
 import {
   TForgotPasswordFormData,
   TForgotPasswordFormStep3Schema,
 } from "@/features/auth/types/forgotpassword";
-import { useSignIn } from "@clerk/nextjs";
-import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import z from "zod";
-import FormHeader from "../FormHeader";
 
 export default function ForgotPasswordStep3() {
-  const { isLoaded, signIn, setActive } = useSignIn();
-
+  const { handleStep3, isLoaded } = useForgotPassword();
   const multiStepForm = useMultiStepFormContext<TForgotPasswordFormData>();
 
   const form = useForm<z.infer<typeof TForgotPasswordFormStep3Schema>>({
@@ -36,49 +33,6 @@ export default function ForgotPasswordStep3() {
     },
   });
 
-  async function onSubmit(
-    data: z.infer<typeof TForgotPasswordFormStep3Schema>,
-  ) {
-    multiStepForm.setMultiFormData({
-      password: data.password,
-      confirmPassword: data.confirmPassword,
-    });
-
-    await signIn
-      ?.attemptFirstFactor({
-        strategy: "reset_password_email_code",
-        code: multiStepForm.getMultiFormData().verificationPin,
-        password: form.getValues("password"),
-      })
-      .then((result) => {
-        // Check if 2FA is required
-        if (result.status === "needs_second_factor") {
-          toast.info("Need to verify second factor");
-        } else if (result.status === "complete") {
-          // Set the active session to
-          // the newly created session (user is now signed in)
-          setActive({ session: result.createdSessionId });
-        } else {
-          toast.error("An unexpected error occurred. Please try again.");
-        }
-      })
-      .catch((err) => {
-        if (isClerkAPIResponseError(err)) {
-          switch (err.errors[0].code) {
-            case "form_code_incorrect":
-              multiStepForm.backStep();
-              toast.error(err.errors[0].longMessage);
-              break;
-            default:
-              toast.error(err.errors[0].longMessage);
-              break;
-          }
-        } else {
-          toast.error("An unexpected error occurred. Please try again.");
-        }
-      });
-  }
-
   return (
     <>
       <FormHeader>
@@ -88,7 +42,7 @@ export default function ForgotPasswordStep3() {
         </FormHeader.SubHeader>
       </FormHeader>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(handleStep3)} className="space-y-4">
           <FormField
             control={form.control}
             name="password"

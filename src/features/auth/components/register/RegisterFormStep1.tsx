@@ -15,22 +15,19 @@ import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import GithubOAuth from "@/features/auth/components/GithubOAuth";
 import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
+import useRegister from "@/features/auth/hooks/useRegister";
 import {
   TRegisterFormData,
   TRegisterFormStep1Schema,
 } from "@/features/auth/types/register";
-import { useSignUp } from "@clerk/nextjs";
-import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import z from "zod";
 
 export default function RegisterStep1() {
+  const { handleStep1, isLoaded } = useRegister();
   const multiStepForm = useMultiStepFormContext<TRegisterFormData>();
-
-  const { isLoaded, signUp } = useSignUp();
 
   const form = useForm<z.infer<typeof TRegisterFormStep1Schema>>({
     resolver: zodResolver(TRegisterFormStep1Schema),
@@ -39,28 +36,6 @@ export default function RegisterStep1() {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof TRegisterFormStep1Schema>) => {
-    multiStepForm.setMultiFormData({ email: form.getValues("email") });
-
-    if (!isLoaded) return;
-
-    try {
-      await signUp.create({
-        emailAddress: data.email,
-      });
-      multiStepForm.nextStep();
-    } catch (err) {
-      if (isClerkAPIResponseError(err)) {
-        switch (err.errors[0].code) {
-          default:
-            toast.error(err.errors[0].longMessage);
-            break;
-        }
-      } else {
-        toast.error("An unexpected error occurred. Please try again.");
-      }
-    }
-  };
   return (
     <>
       <FormHeader>
@@ -75,7 +50,7 @@ export default function RegisterStep1() {
       </div>
       <FormSeparater />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(handleStep1)} className="space-y-4">
           <FormField
             control={form.control}
             name="email"
