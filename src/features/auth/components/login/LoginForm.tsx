@@ -36,7 +36,7 @@ export default function LoginForm() {
       <FormHeader>
         <FormHeader.MainHeader>Login</FormHeader.MainHeader>
         <FormHeader.SubHeader>
-          Enter your email and password below to login to your
+          Login with social providers or email and password.
         </FormHeader.SubHeader>
       </FormHeader>
       <div className="space-y-2">

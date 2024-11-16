@@ -40,7 +40,7 @@ export default function RegisterStep2() {
       <FormHeader>
         <FormHeader.MainHeader>Register</FormHeader.MainHeader>
         <FormHeader.SubHeader>
-          Enter your name and password to register
+          Enter your name and password to register.
         </FormHeader.SubHeader>
       </FormHeader>
       <Form {...form}>

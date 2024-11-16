@@ -3,7 +3,6 @@
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -42,7 +41,7 @@ export default function ForgotPasswordStep2() {
       <FormHeader>
         <FormHeader.MainHeader>Forgot Password</FormHeader.MainHeader>
         <FormHeader.SubHeader>
-          Enter your email to reset your password
+          Enter the verification code sent to your email.
         </FormHeader.SubHeader>
       </FormHeader>
       <Form {...form}>
@@ -74,9 +73,6 @@ export default function ForgotPasswordStep2() {
                     </InputOTPGroup>
                   </InputOTP>
                 </FormControl>
-                <FormDescription className="text-center">
-                  Please enter the verification code sent to your email.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

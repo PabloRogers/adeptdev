@@ -38,7 +38,7 @@ export default function ForgotPasswordStep1() {
       <FormHeader>
         <FormHeader.MainHeader>Forgot Password</FormHeader.MainHeader>
         <FormHeader.SubHeader>
-          Enter your email to reset your password
+          Enter your email to reset your password.
         </FormHeader.SubHeader>
       </FormHeader>
       <Form {...form}>
