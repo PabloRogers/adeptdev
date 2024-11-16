@@ -47,13 +47,13 @@ export default function ForgotPasswordStep2() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleStep2)}
-          className="flex flex-col items-center w-full space-y-6"
+          className="flex w-full flex-col items-center space-y-6"
         >
           <FormField
             control={form.control}
             name="verificationPin"
             render={({ field }) => (
-              <FormItem className="flex flex-col items-center w-full justify-center space-y-4">
+              <FormItem className="flex w-full flex-col items-center justify-center space-y-4">
                 <FormLabel>Verification Code</FormLabel>
                 <FormControl
                   onChange={() => {

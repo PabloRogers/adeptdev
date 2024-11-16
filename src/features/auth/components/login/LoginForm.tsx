@@ -86,7 +86,7 @@ export default function LoginForm() {
           >
             Login
           </FormSubmitButton>
-          <div className="mt-4 text-muted-foreground text-center text-sm">
+          <div className="mt-4 text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
             <Link href="/register" className="underline">
               Register

@@ -8,15 +8,15 @@ export default function FormContentWrapper({
   children,
 }: FormContentWrapperProps) {
   return (
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="flex flex-col lg:flex-row w-full h-screen max-w-[1400px]">
-        <div className="hidden lg:flex justify-center items-center w-full lg:w-1/2 h-full py-10 px-2">
-          <Card className="w-full h-full rounded-lg flex justify-center items-center ">
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="flex h-screen w-full flex-col items-center justify-center lg:flex-row">
+        <div className="hidden h-full w-full items-center justify-center px-2 py-10 lg:flex lg:w-1/2">
+          <Card className="flex h-full max-h-[800px] w-full flex-grow items-center justify-center rounded-lg">
             hero
           </Card>
         </div>
-        <div className="flex justify-center items-center h-full w-full lg:w-1/2 py-10 px-2">
-          <Card className="w-full h-full rounded-lg flex justify-center items-center">
+        <div className="flex h-full w-full max-w-xl items-center justify-center px-2 py-10 lg:w-1/2">
+          <Card className="flex h-full max-h-[800px] w-full items-center justify-center rounded-lg">
             {children}
           </Card>
         </div>
