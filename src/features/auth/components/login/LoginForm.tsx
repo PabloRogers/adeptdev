@@ -80,14 +80,12 @@ export default function LoginForm() {
               </FormItem>
             )}
           />
-
           <FormSubmitButton
             disabled={isLoaded}
             isloading={form.formState.isSubmitting}
           >
             Login
           </FormSubmitButton>
-
           <div className="mt-4 text-muted-foreground text-center text-sm">
             Don&apos;t have an account?{" "}
             <Link href="/register" className="underline">

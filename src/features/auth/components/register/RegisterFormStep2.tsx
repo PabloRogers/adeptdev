@@ -85,7 +85,6 @@ export default function RegisterStep2() {
               />
             </div>
           </div>
-
           <FormField
             control={form.control}
             name="password"

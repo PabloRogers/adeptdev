@@ -81,7 +81,6 @@ export default function ForgotPasswordStep2() {
               </FormItem>
             )}
           />
-
           <FormSubmitButton
             disabled={isLoaded}
             isloading={form.formState.isLoading}

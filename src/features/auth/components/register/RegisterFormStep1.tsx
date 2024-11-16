@@ -64,7 +64,6 @@ export default function RegisterStep1() {
               </FormItem>
             )}
           />
-
           <FormSubmitButton
             disabled={isLoaded}
             isloading={form.formState.isSubmitting}

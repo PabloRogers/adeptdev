@@ -38,7 +38,7 @@ export default function RegisterFormStep3() {
   });
 
   return (
-    <div className="w-full flex flex-col items-center">
+    <>
       <FormHeader>
         <FormHeader.MainHeader>Verify Your Email</FormHeader.MainHeader>
         <FormHeader.SubHeader>
@@ -81,7 +81,6 @@ export default function RegisterFormStep3() {
               </FormItem>
             )}
           />
-
           <FormSubmitButton
             disabled={isLoaded}
             isloading={form.formState.isSubmitting}
@@ -90,6 +89,6 @@ export default function RegisterFormStep3() {
           </FormSubmitButton>
         </form>
       </Form>
-    </div>
+    </>
   );
 }
