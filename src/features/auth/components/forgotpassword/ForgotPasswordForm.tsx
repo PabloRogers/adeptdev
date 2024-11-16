@@ -5,12 +5,12 @@ import ForgotPasswordStep2 from "@/features/auth/components/forgotpassword/Forgo
 import ForgotPasswordStep3 from "@/features/auth/components/forgotpassword/ForgotPasswordStep3";
 import MultiStepFormWrapper from "@/features/auth/components/MultiStepFormWrapper";
 import { MultiStepFormContext } from "@/features/auth/context/MultiStepForm";
-import { TForgotPasswordFormData } from "@/features/auth/types/forgotpassword";
+import { ForgotPasswordFormData } from "@/features/auth/types/forgotpassword";
 import useMultiStepForm from "@/hooks/useMultiStepForm";
 import { useEffect } from "react";
 
 export default function ForgotPasswordFrom() {
-  const initialFormData: TForgotPasswordFormData = {
+  const initialFormData: ForgotPasswordFormData = {
     email: "",
     verificationPin: "",
     password: "",
@@ -18,7 +18,7 @@ export default function ForgotPasswordFrom() {
   };
 
   const multiStepForm =
-    useMultiStepForm<TForgotPasswordFormData>(initialFormData);
+    useMultiStepForm<ForgotPasswordFormData>(initialFormData);
 
   useEffect(() => {
     const steps = [

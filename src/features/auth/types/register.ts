@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export interface TRegisterFormData {
+export interface RegisterFormDataSchema {
   email: string;
   firstName: string;
   lastName: string;
@@ -9,14 +9,14 @@ export interface TRegisterFormData {
   verificationPin: string;
 }
 
-export const TRegisterFormStep1Schema = z.object({
+export const RegisterFormStep1Schema = z.object({
   email: z
     .string()
     .email({ message: "Invalid email address." })
     .min(1, { message: "Email is required." }),
 });
 
-export const TRegisterFormStep2Schema = z
+export const RegisterFormStep2Schema = z
   .object({
     firstName: z.string().min(2, {
       message: "First name must be at least 2 characters.",
@@ -36,7 +36,7 @@ export const TRegisterFormStep2Schema = z
     path: ["confirmPassword"],
   });
 
-export const TRegisterFormStep3Schema = z.object({
+export const RegisterFormStep3Schema = z.object({
   verificationPin: z.string().min(5, {
     message: "Username must be at least 2 characters.",
   }),

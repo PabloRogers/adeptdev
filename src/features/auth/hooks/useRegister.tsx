@@ -1,9 +1,9 @@
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import {
-  TRegisterFormData,
-  TRegisterFormStep1Schema,
-  TRegisterFormStep2Schema,
-  TRegisterFormStep3Schema,
+  RegisterFormDataSchema,
+  RegisterFormStep1Schema,
+  RegisterFormStep2Schema,
+  RegisterFormStep3Schema,
 } from "@/features/auth/types/register";
 import { useSignUp } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
@@ -11,12 +11,10 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 export default function useRegister() {
-  const multiStepForm = useMultiStepFormContext<TRegisterFormData>();
+  const multiStepForm = useMultiStepFormContext<RegisterFormDataSchema>();
   const { isLoaded, signUp, setActive } = useSignUp();
 
-  const handleStep1 = async (
-    data: z.infer<typeof TRegisterFormStep1Schema>,
-  ) => {
+  const handleStep1 = async (data: z.infer<typeof RegisterFormStep1Schema>) => {
     multiStepForm.setMultiFormData({ email: data.email });
 
     if (!isLoaded) return;
@@ -39,7 +37,7 @@ export default function useRegister() {
     }
   };
 
-  async function handleStep2(data: z.infer<typeof TRegisterFormStep2Schema>) {
+  async function handleStep2(data: z.infer<typeof RegisterFormStep2Schema>) {
     multiStepForm.setMultiFormData({
       firstName: data.firstName,
       lastName: data.lastName,
@@ -76,7 +74,7 @@ export default function useRegister() {
     }
   }
 
-  async function handleStep3(data: z.infer<typeof TRegisterFormStep3Schema>) {
+  async function handleStep3(data: z.infer<typeof RegisterFormStep3Schema>) {
     multiStepForm.setMultiFormData({
       verificationPin: data.verificationPin,
     });

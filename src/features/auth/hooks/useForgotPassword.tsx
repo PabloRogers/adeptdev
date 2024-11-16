@@ -1,9 +1,9 @@
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import {
-  TForgotPasswordFormData,
-  TForgotPasswordFormStep1Schema,
-  TForgotPasswordFormStep2Schema,
-  TForgotPasswordFormStep3Schema,
+  ForgotPasswordFormDataSchema,
+  ForgotPasswordFormStep1Schema,
+  ForgotPasswordFormStep2Schema,
+  ForgotPasswordFormStep3Schema,
 } from "@/features/auth/types/forgotpassword";
 import { useSignIn } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
@@ -12,10 +12,10 @@ import { z } from "zod";
 
 export default function useForgotPassword() {
   const { isLoaded, signIn, setActive } = useSignIn();
-  const multiStepForm = useMultiStepFormContext<TForgotPasswordFormData>();
+  const multiStepForm = useMultiStepFormContext<ForgotPasswordFormDataSchema>();
 
   const handleStep1 = async (
-    data: z.infer<typeof TForgotPasswordFormStep1Schema>,
+    data: z.infer<typeof ForgotPasswordFormStep1Schema>,
   ) => {
     multiStepForm.setMultiFormData({ email: data.email });
 
@@ -41,7 +41,7 @@ export default function useForgotPassword() {
       });
   };
   async function handleStep2(
-    data: z.infer<typeof TForgotPasswordFormStep2Schema>,
+    data: z.infer<typeof ForgotPasswordFormStep2Schema>,
   ) {
     multiStepForm.setMultiFormData({
       verificationPin: data.verificationPin,
@@ -51,7 +51,7 @@ export default function useForgotPassword() {
   }
 
   async function handleStep3(
-    data: z.infer<typeof TForgotPasswordFormStep3Schema>,
+    data: z.infer<typeof ForgotPasswordFormStep3Schema>,
   ) {
     multiStepForm.setMultiFormData({
       password: data.password,

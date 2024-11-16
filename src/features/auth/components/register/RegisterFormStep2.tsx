@@ -14,8 +14,8 @@ import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import useRegister from "@/features/auth/hooks/useRegister";
 import {
-  TRegisterFormData,
-  TRegisterFormStep2Schema,
+  RegisterFormDataSchema,
+  RegisterFormStep2Schema,
 } from "@/features/auth/types/register";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -23,10 +23,10 @@ import z from "zod";
 
 export default function RegisterStep2() {
   const { handleStep2, isLoaded } = useRegister();
-  const multiStepForm = useMultiStepFormContext<TRegisterFormData>();
+  const multiStepForm = useMultiStepFormContext<RegisterFormDataSchema>();
 
-  const form = useForm<z.infer<typeof TRegisterFormStep2Schema>>({
-    resolver: zodResolver(TRegisterFormStep2Schema),
+  const form = useForm<z.infer<typeof RegisterFormStep2Schema>>({
+    resolver: zodResolver(RegisterFormStep2Schema),
     defaultValues: {
       firstName: multiStepForm.getMultiFormData().firstName,
       lastName: multiStepForm.getMultiFormData().lastName,

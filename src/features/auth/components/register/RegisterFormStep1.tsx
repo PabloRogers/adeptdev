@@ -17,8 +17,8 @@ import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import useRegister from "@/features/auth/hooks/useRegister";
 import {
-  TRegisterFormData,
-  TRegisterFormStep1Schema,
+  RegisterFormDataSchema,
+  RegisterFormStep1Schema,
 } from "@/features/auth/types/register";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -27,10 +27,10 @@ import z from "zod";
 
 export default function RegisterStep1() {
   const { handleStep1, isLoaded } = useRegister();
-  const multiStepForm = useMultiStepFormContext<TRegisterFormData>();
+  const multiStepForm = useMultiStepFormContext<RegisterFormDataSchema>();
 
-  const form = useForm<z.infer<typeof TRegisterFormStep1Schema>>({
-    resolver: zodResolver(TRegisterFormStep1Schema),
+  const form = useForm<z.infer<typeof RegisterFormStep1Schema>>({
+    resolver: zodResolver(RegisterFormStep1Schema),
     defaultValues: {
       email: multiStepForm.getMultiFormData().email,
     },
