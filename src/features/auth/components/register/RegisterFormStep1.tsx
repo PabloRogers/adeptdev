@@ -39,7 +39,7 @@ export default function RegisterStep1() {
   return (
     <>
       <FormHeader>
-        <FormHeader.MainHeader>Create Your Accoutn</FormHeader.MainHeader>
+        <FormHeader.MainHeader>Create Your Account</FormHeader.MainHeader>
         <FormHeader.SubHeader>
           Register with social providers or email and password
         </FormHeader.SubHeader>
