@@ -1,10 +1,9 @@
 {
-  "*.{js,jsx,ts,tsx}": ["prettier --write", "eslint --fix", "eslint", "jest"],
-  "*.json": ["prettier --write"],
-  "*.{test.tsx,test.jsx,test.ts}": [
+  "*.{js,jsx,ts,tsx}": [
     "prettier --write",
     "eslint --fix",
     "eslint",
-    "jest"
-  ]
+    "jest --bail --findRelatedTests"
+  ],
+  "*.json": ["prettier --write"]
 }
