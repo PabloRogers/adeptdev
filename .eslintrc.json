@@ -24,6 +24,7 @@
   "plugins": [
     "react",
     "@typescript-eslint",
+    "jest",
     "prettier",
     "boundaries",
     "import"
