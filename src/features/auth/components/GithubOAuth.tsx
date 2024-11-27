@@ -10,6 +10,7 @@ export default function GithubOAuth() {
 
   return (
     <Button
+      data-testid="GithubOAuth-button"
       variant="outline"
       className="w-full"
       disabled={isLoading || !signIn || !signUp}
@@ -17,8 +18,12 @@ export default function GithubOAuth() {
         handleSignIn();
       }}
     >
-      {isLoading && <Loader2 className="animate-spin" />}
-      {!isLoading && <FaGithub className="mr-2 h-5 w-5" />}
+      {isLoading && (
+        <Loader2 data-testid="GithubOAuth-loader" className="animate-spin" />
+      )}
+      {!isLoading && (
+        <FaGithub data-testid="GithubOAuth-icon" className="mr-2 h-5 w-5" />
+      )}
       Sign in with GitHub
     </Button>
   );

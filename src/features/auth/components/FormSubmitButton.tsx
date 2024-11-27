@@ -9,7 +9,7 @@ interface IFormSubmitButtonProps
 }
 
 export default function FormSubmitButton({
-  isloading,
+  isloading = false,
   children,
 }: IFormSubmitButtonProps) {
   return (
@@ -20,7 +20,3 @@ export default function FormSubmitButton({
     </Button>
   );
 }
-
-FormSubmitButton.defaultProps = {
-  isloading: false,
-};

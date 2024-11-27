@@ -10,15 +10,16 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["src/*"]
     }
   },
   "include": [
@@ -29,5 +30,5 @@
     "commitlint.config.js",
     "jest.config.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "coverage"]
 }
