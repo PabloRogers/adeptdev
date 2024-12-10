@@ -9,9 +9,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import FormHeader from "@/features/auth/components/FormHeader";
-import FormSeparater from "@/features/auth/components/FormSeparater";
-import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import GithubOAuth from "@/features/auth/components/GithubOAuth";
 import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
 import useLogin from "@/features/auth/hooks/useLogin";
@@ -20,9 +17,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { AuthForm } from "../AuthForm";
 
 export default function LoginForm() {
-  const { onSubmit, isLoaded } = useLogin();
+  const { handleSignUp } = useLogin();
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
@@ -32,20 +30,20 @@ export default function LoginForm() {
   });
 
   return (
-    <>
-      <FormHeader>
-        <FormHeader.MainHeader>Login</FormHeader.MainHeader>
-        <FormHeader.SubHeader>
+    <AuthForm>
+      <AuthForm.HeaderWrapper>
+        <AuthForm.MainHeader>Login</AuthForm.MainHeader>
+        <AuthForm.SubHeader>
           Login with social providers or email and password.
-        </FormHeader.SubHeader>
-      </FormHeader>
+        </AuthForm.SubHeader>
+      </AuthForm.HeaderWrapper>
       <div className="space-y-2">
         <GithubOAuth />
         <GoogleOAuth />
       </div>
-      <FormSeparater />
+      <AuthForm.Separator />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(handleSignUp)} className="space-y-4">
           <FormField
             control={form.control}
             name="email"
@@ -67,7 +65,7 @@ export default function LoginForm() {
                 <div className="flex items-center">
                   <FormLabel>Password</FormLabel>
                   <Link
-                    href="/forgotpassword"
+                    href="/forgot-password/email"
                     className="ml-auto inline-block text-sm underline"
                   >
                     Forgot your password?
@@ -80,12 +78,12 @@ export default function LoginForm() {
               </FormItem>
             )}
           />
-          <FormSubmitButton
-            disabled={isLoaded}
+          <AuthForm.SubmitButton
+            disabled={false}
             isloading={form.formState.isSubmitting}
           >
             Login
-          </FormSubmitButton>
+          </AuthForm.SubmitButton>
           <div className="mt-4 text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
             <Link href="/register" className="underline">
@@ -94,6 +92,6 @@ export default function LoginForm() {
           </div>
         </form>
       </Form>
-    </>
+    </AuthForm>
   );
 }

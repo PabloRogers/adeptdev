@@ -9,40 +9,37 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import FormHeader from "@/features/auth/components/FormHeader";
-import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
-import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import useForgotPassword from "@/features/auth/hooks/useForgotPassword";
-import {
-  ForgotPasswordFormDataSchema,
-  ForgotPasswordFormStep3Schema,
-} from "@/features/auth/types/forgotpassword";
+import { UpdatePasswordSchema } from "@/features/auth/types/forgotpassword";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { AuthForm } from "../AuthForm";
 
-export default function ForgotPasswordStep3() {
-  const { handleStep3, isLoaded } = useForgotPassword();
-  const multiStepForm = useMultiStepFormContext<ForgotPasswordFormDataSchema>();
+export default function UpdatePasswordForm() {
+  const { handleUpdatePassword } = useForgotPassword();
 
-  const form = useForm<z.infer<typeof ForgotPasswordFormStep3Schema>>({
-    resolver: zodResolver(ForgotPasswordFormStep3Schema),
+  const form = useForm<z.infer<typeof UpdatePasswordSchema>>({
+    resolver: zodResolver(UpdatePasswordSchema),
     defaultValues: {
-      password: multiStepForm.getMultiFormData().password,
-      confirmPassword: multiStepForm.getMultiFormData().confirmPassword,
+      password: "",
+      confirmPassword: "",
     },
   });
 
   return (
-    <>
-      <FormHeader>
-        <FormHeader.MainHeader>Forgot Password</FormHeader.MainHeader>
-        <FormHeader.SubHeader>
+    <AuthForm>
+      <AuthForm.HeaderWrapper>
+        <AuthForm.MainHeader>Update Password</AuthForm.MainHeader>
+        <AuthForm.SubHeader>
           Enter your new password to reset your password.
-        </FormHeader.SubHeader>
-      </FormHeader>
+        </AuthForm.SubHeader>
+      </AuthForm.HeaderWrapper>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleStep3)} className="space-y-4">
+        <form
+          onSubmit={form.handleSubmit(handleUpdatePassword)}
+          className="space-y-4"
+        >
           <FormField
             control={form.control}
             name="password"
@@ -78,14 +75,14 @@ export default function ForgotPasswordStep3() {
               </FormItem>
             )}
           />
-          <FormSubmitButton
-            disabled={isLoaded}
+          <AuthForm.SubmitButton
+            disabled={form.formState.isSubmitting}
             isloading={form.formState.isSubmitting}
           >
             Reset Password
-          </FormSubmitButton>
+          </AuthForm.SubmitButton>
         </form>
       </Form>
-    </>
+    </AuthForm>
   );
 }

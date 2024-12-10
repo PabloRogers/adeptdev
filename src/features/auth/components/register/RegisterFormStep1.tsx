@@ -9,13 +9,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import FormHeader from "@/features/auth/components/FormHeader";
-import FormSeparater from "@/features/auth/components/FormSeparater";
-import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import GithubOAuth from "@/features/auth/components/GithubOAuth";
 import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
-import useRegister from "@/features/auth/hooks/useRegister";
 import {
   RegisterFormDataSchema,
   RegisterFormStep1Schema,
@@ -24,33 +20,38 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { AuthForm } from "../AuthForm";
 
 export default function RegisterStep1() {
-  const { handleStep1, isLoaded } = useRegister();
   const multiStepForm = useMultiStepFormContext<RegisterFormDataSchema>();
 
   const form = useForm<z.infer<typeof RegisterFormStep1Schema>>({
     resolver: zodResolver(RegisterFormStep1Schema),
     defaultValues: {
-      email: multiStepForm.getMultiFormData().email,
+      email: multiStepForm.getData().email,
     },
   });
 
+  function onSubmit(data: z.infer<typeof RegisterFormStep1Schema>) {
+    multiStepForm.setData(data);
+    multiStepForm.nextStep();
+  }
+
   return (
-    <>
-      <FormHeader>
-        <FormHeader.MainHeader>Create Your Account</FormHeader.MainHeader>
-        <FormHeader.SubHeader>
-          Register with social providers or email and password
-        </FormHeader.SubHeader>
-      </FormHeader>
+    <AuthForm>
+      <AuthForm.HeaderWrapper>
+        <AuthForm.MainHeader>Create Your Account</AuthForm.MainHeader>
+        <AuthForm.SubHeader>
+          Register with social providers or email.
+        </AuthForm.SubHeader>
+      </AuthForm.HeaderWrapper>
       <div className="space-y-2">
         <GithubOAuth />
         <GoogleOAuth />
       </div>
-      <FormSeparater />
+      <AuthForm.Separator />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleStep1)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
             name="email"
@@ -64,12 +65,12 @@ export default function RegisterStep1() {
               </FormItem>
             )}
           />
-          <FormSubmitButton
-            disabled={isLoaded}
+          <AuthForm.SubmitButton
+            disabled={form.formState.isSubmitting}
             isloading={form.formState.isSubmitting}
           >
             Continue
-          </FormSubmitButton>
+          </AuthForm.SubmitButton>
           <div className="mt-4 text-center text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link href="/login" className="underline">
@@ -78,6 +79,6 @@ export default function RegisterStep1() {
           </div>
         </form>
       </Form>
-    </>
+    </AuthForm>
   );
 }

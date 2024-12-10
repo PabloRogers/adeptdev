@@ -1,112 +1,31 @@
-import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
-import {
-  RegisterFormDataSchema,
-  RegisterFormStep1Schema,
-  RegisterFormStep2Schema,
-  RegisterFormStep3Schema,
-} from "@/features/auth/types/register";
-import { useSignUp } from "@clerk/nextjs";
-import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
+"use client";
+
+import createClient from "@/utils/supabase/client";
+import { isAuthApiError } from "@supabase/supabase-js";
+
 import { toast } from "sonner";
-import { z } from "zod";
+import handleAuthErrors from "../utils/handleAuthErrors";
 
 export default function useRegister() {
-  const multiStepForm = useMultiStepFormContext<RegisterFormDataSchema>();
-  const { isLoaded, signUp, setActive } = useSignUp();
+  const supabase = createClient();
 
-  const handleStep1 = async (data: z.infer<typeof RegisterFormStep1Schema>) => {
-    multiStepForm.setMultiFormData({ email: data.email });
-
-    if (!isLoaded) return;
-
+  const handleSignUp = async (email: string, password: string) => {
     try {
-      await signUp.create({
-        emailAddress: data.email,
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
       });
-      multiStepForm.nextStep();
-    } catch (err) {
-      if (isClerkAPIResponseError(err)) {
-        switch (err.errors[0].code) {
-          default:
-            toast.error(err.errors[0].longMessage);
-            break;
-        }
+
+      if (error) throw error;
+      toast.success("Account created successfully!");
+    } catch (error) {
+      if (isAuthApiError(error)) {
+        handleAuthErrors(error);
       } else {
         toast.error("An unexpected error occurred. Please try again.");
       }
     }
   };
 
-  async function handleStep2(data: z.infer<typeof RegisterFormStep2Schema>) {
-    multiStepForm.setMultiFormData({
-      firstName: data.firstName,
-      lastName: data.lastName,
-      password: data.password,
-      confirmPassword: data.confirmPassword,
-    });
-
-    if (!isLoaded) return;
-
-    try {
-      await signUp.create({
-        emailAddress: multiStepForm.getMultiFormData().email,
-        password: data.confirmPassword,
-        firstName: data.firstName,
-        lastName: data.lastName,
-      });
-
-      await signUp.prepareEmailAddressVerification({
-        strategy: "email_code",
-      });
-
-      toast.info("A verification code has been sent to your email address.");
-      multiStepForm.nextStep();
-    } catch (err) {
-      if (isClerkAPIResponseError(err)) {
-        switch (err.errors[0].code) {
-          default:
-            toast.error(err.errors[0].longMessage);
-            break;
-        }
-      } else {
-        toast.error("An unexpected error occurred. Please try again.");
-      }
-    }
-  }
-
-  async function handleStep3(data: z.infer<typeof RegisterFormStep3Schema>) {
-    multiStepForm.setMultiFormData({
-      verificationPin: data.verificationPin,
-    });
-
-    if (!isLoaded) return;
-
-    try {
-      // Use the code the user provided to attempt verification
-      const signUpAttempt = await signUp.attemptEmailAddressVerification({
-        code: data.verificationPin,
-      });
-
-      // If verification was completed, set the session to active
-      // and redirect the user
-      if (signUpAttempt.status === "complete") {
-        await setActive({ session: signUpAttempt.createdSessionId });
-      } else {
-        // If the status is not complete, check why. User may need to
-        // complete further steps.
-        toast.error("Status is not complete. Please try again.");
-      }
-    } catch (err) {
-      if (isClerkAPIResponseError(err)) {
-        switch (err.errors[0].code) {
-          default:
-            toast.error(err.errors[0].longMessage);
-            break;
-        }
-      } else {
-        toast.error("An unexpected error occurred. Please try again.");
-      }
-    }
-  }
-  return { handleStep1, handleStep2, handleStep3, isLoaded };
+  return { handleSignUp };
 }

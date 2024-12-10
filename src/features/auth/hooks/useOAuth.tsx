@@ -1,66 +1,36 @@
-import { useSignIn, useSignUp } from "@clerk/nextjs";
+"use client";
+
+import createClient from "@/utils/supabase/client";
+import { isAuthApiError } from "@supabase/supabase-js";
 import { useState } from "react";
+import { toast } from "sonner";
+import { OAuthProvider } from "../types/OAuthProvider";
+import handleAuthErrors from "../utils/handleAuthErrors";
 
-type OAuthStrategy = "oauth_google" | "oauth_github";
-
-export default function useOAuth(strategy: OAuthStrategy) {
-  const { signIn } = useSignIn();
-  const { signUp, setActive } = useSignUp();
+export default function useOAuth(provider: OAuthProvider) {
   const [isLoading, setIsLoading] = useState(false);
+  const supabase = createClient();
 
-  const signInWith = () => {
-    return signIn?.authenticateWithRedirect({
-      strategy,
-      redirectUrl: "/sign-up/sso-callback",
-      redirectUrlComplete: "/",
-    });
-  };
-
-  async function handleSignIn() {
+  async function signInWithOAuthProvider() {
     setIsLoading(true);
-    if (!signIn || !signUp) return null;
-
-    // If the user has an account in your application, but does not yet
-    // have an OAuth account connected to it, you can transfer the OAuth
-    // account to the existing user account.
-    const userExistsButNeedsToSignIn =
-      signUp.verifications.externalAccount.status === "transferable" &&
-      signUp.verifications.externalAccount.error?.code ===
-        "external_account_exists";
-
-    if (userExistsButNeedsToSignIn) {
-      const res = await signIn.create({ transfer: true });
-
-      if (res.status === "complete") {
-        setActive({
-          session: res.createdSessionId,
-        });
-      }
-    }
-
-    // If the user has an OAuth account but does not yet
-    // have an account in your app, you can create an account
-    // for them using the OAuth information.
-    const userNeedsToBeCreated =
-      signIn.firstFactorVerification.status === "transferable";
-
-    if (userNeedsToBeCreated) {
-      const res = await signUp.create({
-        transfer: true,
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: "http://localhost:3000/callback",
+        },
       });
 
-      if (res.status === "complete") {
-        setActive({
-          session: res.createdSessionId,
-        });
+      if (error) throw error;
+    } catch (error) {
+      if (isAuthApiError(error)) {
+        handleAuthErrors(error);
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
       }
-    } else {
-      // If the user has an account in your application
-      // and has an OAuth account connected to it, you can sign them in.
-      signInWith();
     }
 
-    return null;
+    setIsLoading(false);
   }
-  return { signIn, signUp, handleSignIn, isLoading };
+  return { isLoading, signInWithOAuthProvider };
 }

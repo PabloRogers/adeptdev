@@ -12,15 +12,16 @@ export interface TUseMultiStepFormReturn<T> {
   nextStep: () => void;
   backStep: () => void;
   setSteps: (newSteps: React.ReactElement[]) => void;
-  setMultiFormData: (newFormData: Partial<T>) => void;
-  getMultiFormData: () => T;
+  setData: (newFormData: Partial<T>) => void;
+  getData: () => T;
 }
 
 export default function useMultiStepForm<T>(
   initialFormData: T,
+  initialSteps: React.ReactElement[],
 ): TUseMultiStepFormReturn<T> {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [steps, setStepsState] = useState<React.ReactElement[]>([]);
+  const [steps, setStepsState] = useState<React.ReactElement[]>(initialSteps);
   const [formData, setFormData] = useState<T>(initialFormData);
 
   const isFirstStep = currentStepIndex === 0;
@@ -42,11 +43,11 @@ export default function useMultiStepForm<T>(
     setStepsState(newSteps);
   }, []);
 
-  const setMultiFormData = useCallback((newFormData: Partial<T>) => {
+  const setData = useCallback((newFormData: Partial<T>) => {
     setFormData((prevFormData) => ({ ...prevFormData, ...newFormData }));
   }, []);
 
-  const getMultiFormData = useCallback(() => formData, [formData]);
+  const getData = useCallback(() => formData, [formData]);
 
   return {
     currentStepIndex,
@@ -60,7 +61,7 @@ export default function useMultiStepForm<T>(
     nextStep,
     backStep,
     setSteps,
-    setMultiFormData,
-    getMultiFormData,
+    setData,
+    getData,
   };
 }

@@ -14,10 +14,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import FormHeader from "@/features/auth/components/FormHeader";
-import FormSubmitButton from "@/features/auth/components/FormSubmitButton";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
-import useRegister from "@/features/auth/hooks/useRegister";
 import {
   RegisterFormDataSchema,
   RegisterFormStep3Schema,
@@ -25,29 +22,33 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { AuthForm } from "../AuthForm";
 
 export default function RegisterFormStep3() {
-  const { handleStep3, isLoaded } = useRegister();
   const multiStepForm = useMultiStepFormContext<RegisterFormDataSchema>();
 
   const form = useForm<z.infer<typeof RegisterFormStep3Schema>>({
     resolver: zodResolver(RegisterFormStep3Schema),
     defaultValues: {
-      verificationPin: multiStepForm.getMultiFormData().verificationPin,
+      verificationPin: multiStepForm.getData().verificationPin,
     },
   });
 
+  function onSubmit(data: z.infer<typeof RegisterFormStep3Schema>) {
+    multiStepForm.setData(data);
+  }
+
   return (
-    <>
-      <FormHeader>
-        <FormHeader.MainHeader>Verify Your Email</FormHeader.MainHeader>
-        <FormHeader.SubHeader>
+    <AuthForm>
+      <AuthForm.HeaderWrapper>
+        <AuthForm.MainHeader>Verify Your Email</AuthForm.MainHeader>
+        <AuthForm.SubHeader>
           Enter the verification code sent to your email
-        </FormHeader.SubHeader>
-      </FormHeader>
+        </AuthForm.SubHeader>
+      </AuthForm.HeaderWrapper>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(handleStep3)}
+          onSubmit={form.handleSubmit(onSubmit)}
           className="flex w-full flex-col items-center space-y-6"
         >
           <FormField
@@ -58,7 +59,7 @@ export default function RegisterFormStep3() {
                 <FormLabel>Verification Code</FormLabel>
                 <FormControl
                   onChange={() => {
-                    multiStepForm.setMultiFormData({
+                    multiStepForm.setData({
                       verificationPin: form.getValues("verificationPin"),
                     });
                   }}
@@ -81,14 +82,14 @@ export default function RegisterFormStep3() {
               </FormItem>
             )}
           />
-          <FormSubmitButton
-            disabled={isLoaded}
+          <AuthForm.SubmitButton
+            disabled={form.formState.isSubmitting}
             isloading={form.formState.isSubmitting}
           >
             Continue
-          </FormSubmitButton>
+          </AuthForm.SubmitButton>
         </form>
       </Form>
-    </>
+    </AuthForm>
   );
 }

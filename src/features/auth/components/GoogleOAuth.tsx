@@ -4,15 +4,15 @@ import { Loader2 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 
 export default function GoogleOAuth() {
-  const { signIn, signUp, isLoading, handleSignIn } = useOAuth("oauth_google");
+  const { isLoading, signInWithOAuthProvider } = useOAuth("google");
 
   return (
     <Button
       variant="outline"
       className="w-full"
-      disabled={isLoading || !signIn || !signUp}
+      disabled={isLoading}
       onClick={() => {
-        handleSignIn();
+        signInWithOAuthProvider();
       }}
     >
       {isLoading && <Loader2 className="animate-spin" />}

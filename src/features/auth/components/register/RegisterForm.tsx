@@ -3,11 +3,10 @@
 import MultiStepFormWrapper from "@/features/auth/components/MultiStepFormWrapper";
 import RegisterFormStep1 from "@/features/auth/components/register/RegisterFormStep1";
 import RegisterFormStep2 from "@/features/auth/components/register/RegisterFormStep2";
-import RegisterFormStep3 from "@/features/auth/components/register/RegisterFormStep3";
 import { MultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import { RegisterFormDataSchema } from "@/features/auth/types/register";
 import useMultiStepForm from "@/hooks/useMultiStepForm";
-import { useEffect } from "react";
+import ResetEmailNotification from "../forgotpassword/ResetEmailNotification";
 
 export default function RegisterForm() {
   const initialFormData: RegisterFormDataSchema = {
@@ -19,18 +18,16 @@ export default function RegisterForm() {
     verificationPin: "",
   };
 
-  const multiStepForm =
-    useMultiStepForm<RegisterFormDataSchema>(initialFormData);
+  const steps = [
+    <RegisterFormStep1 key="step1" />,
+    <RegisterFormStep2 key="step2" />,
+    <ResetEmailNotification key="step3" />,
+  ];
 
-  // make a state in useMutliStepForm to store the steps
-  useEffect(() => {
-    const steps = [
-      <RegisterFormStep1 key="step1" />,
-      <RegisterFormStep2 key="step2" />,
-      <RegisterFormStep3 key="step3" />,
-    ];
-    multiStepForm.setSteps(steps);
-  }, []);
+  const multiStepForm = useMultiStepForm<RegisterFormDataSchema>(
+    initialFormData,
+    steps,
+  );
 
   return (
     <MultiStepFormContext.Provider value={multiStepForm}>

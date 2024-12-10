@@ -1,45 +1,36 @@
+"use client";
+
 import LoginFormSchema from "@/features/auth/types/login";
-import { useSignIn } from "@clerk/nextjs";
-import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
+import createClient from "@/utils/supabase/client";
+import { isAuthApiError } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import z from "zod";
+import handleAuthErrors from "../utils/handleAuthErrors";
 
 export default function useLogin() {
-  const { isLoaded, signIn, setActive } = useSignIn();
+  const router = useRouter();
 
-  async function onSubmit(data: z.infer<typeof LoginFormSchema>) {
-    if (!isLoaded) {
-      return;
-    }
-
+  async function handleSignUp(formData: z.infer<typeof LoginFormSchema>) {
     try {
-      const signInAttempt = await signIn.create({
-        identifier: data.email,
-        password: data.password,
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
       });
 
-      // If sign-in process is complete, set the created session as active
-      // and redirect the user
+      if (error) throw error;
 
-      if (signInAttempt.status === "complete") {
-        await setActive({ session: signInAttempt.createdSessionId });
-      } else {
-        // If the status is not complete, check why. User may need to
-        // complete further steps.
-        toast.error("An unexpected error occurred. Please try again.");
-      }
-    } catch (err: any) {
-      if (isClerkAPIResponseError(err)) {
-        switch (err.errors[0].code) {
-          default:
-            toast.error(err.errors[0].longMessage);
-            break;
-        }
+      toast.success("Login successful!");
+      router.push("/");
+    } catch (error) {
+      if (isAuthApiError(error)) {
+        handleAuthErrors(error);
       } else {
         toast.error("An unexpected error occurred. Please try again.");
       }
     }
   }
 
-  return { onSubmit, isLoaded };
+  return { handleSignUp };
 }

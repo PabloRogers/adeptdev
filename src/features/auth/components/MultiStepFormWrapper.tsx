@@ -14,7 +14,7 @@ export default function MultiStepFormWrapper({
   const multiStepForm = useMultiStepFormContext();
   const keys = ["step1", "step2", "step3"];
   return (
-    <div className="flex w-[450px] flex-col items-center justify-center p-10">
+    <div className="flex flex-col items-center justify-center p-10">
       <div className="flex h-fit w-full flex-col items-center justify-center space-y-5">
         <div className="flex w-full justify-end">
           {!multiStepForm.isFirstStep && (
@@ -27,7 +27,7 @@ export default function MultiStepFormWrapper({
             </Button>
           )}
         </div>
-        <div className="w-full space-y-6">{children}</div>
+        <div className="space-y-6">{children}</div>
         <div className="flex w-full items-center justify-center space-x-2">
           {Array.from({ length: multiStepForm.length }).map((_, index) => (
             <div

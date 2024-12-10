@@ -1,14 +1,13 @@
 import SignOutButton from "@/features/auth/components/SignOutButton";
-import { currentUser } from "@clerk/nextjs/server";
+import createClient from "@/utils/supabase/server";
 
 export default async function Home() {
-  const user = await currentUser();
+  const supabase = await createClient();
+  const user = await supabase.auth.getUser();
 
   return (
     <div>
-      <h1>
-        Hello, {user?.firstName} {user?.lastName}
-      </h1>
+      <h1>Hello, {user.data.user?.email}</h1>
 
       <SignOutButton />
     </div>
