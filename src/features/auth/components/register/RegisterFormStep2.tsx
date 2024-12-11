@@ -16,12 +16,14 @@ import {
   RegisterFormStep2Schema,
 } from "@/features/auth/types/register";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { AuthForm } from "../AuthForm";
 
 export default function RegisterStep2() {
   const { handleSignUp } = useRegister();
+  const router = useRouter();
   const multiStepForm = useMultiStepFormContext<RegisterFormDataSchema>();
 
   const form = useForm<z.infer<typeof RegisterFormStep2Schema>>({
@@ -37,7 +39,7 @@ export default function RegisterStep2() {
   async function onSubmit(data: z.infer<typeof RegisterFormStep2Schema>) {
     multiStepForm.setData(data);
     await handleSignUp(multiStepForm.formData.email, data.password);
-    multiStepForm.nextStep();
+    router.push("/register");
   }
 
   return (

@@ -6,7 +6,6 @@ import RegisterFormStep2 from "@/features/auth/components/register/RegisterFormS
 import { MultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import { RegisterFormDataSchema } from "@/features/auth/types/register";
 import useMultiStepForm from "@/hooks/useMultiStepForm";
-import ResetEmailNotification from "../forgotpassword/ResetEmailNotification";
 
 export default function RegisterForm() {
   const initialFormData: RegisterFormDataSchema = {
@@ -21,7 +20,6 @@ export default function RegisterForm() {
   const steps = [
     <RegisterFormStep1 key="step1" />,
     <RegisterFormStep2 key="step2" />,
-    <ResetEmailNotification key="step3" />,
   ];
 
   const multiStepForm = useMultiStepForm<RegisterFormDataSchema>(
