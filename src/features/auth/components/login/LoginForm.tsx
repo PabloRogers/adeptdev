@@ -73,7 +73,7 @@ export default function LoginForm() {
                   </Link>
                 </div>
                 <FormControl>
-                  <Input type="password" placeholder="Password" {...field} />
+                  <AuthForm.PasswordInput placeholder="Password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

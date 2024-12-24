@@ -99,11 +99,7 @@ export default function RegisterStep2() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Enter your password"
-                    {...field}
-                  />
+                  <AuthForm.PasswordInput placeholder="Password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -117,9 +113,8 @@ export default function RegisterStep2() {
                 <FormLabel>Confirm Password</FormLabel>
 
                 <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Confirm your Password"
+                  <AuthForm.PasswordInput
+                    placeholder="Confirm Password"
                     {...field}
                   />
                 </FormControl>

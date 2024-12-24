@@ -1,6 +1,10 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
-import { LogIn } from "react-feather";
+import { useState } from "react";
+import { Eye, EyeOff, LogIn } from "react-feather";
 
 interface AuthFormProps {
   children: React.ReactNode;
@@ -67,8 +71,41 @@ export default function FormSubmitButton({
   );
 }
 
+interface PasswordInputProps extends React.HTMLAttributes<HTMLDivElement> {
+  placeholder: string;
+}
+
+export function PasswordInput({ placeholder, ...props }: PasswordInputProps) {
+  const [isVisable, setIsVisable] = useState(false);
+  return (
+    <div className="flex w-full space-x-1">
+      <Input
+        type={isVisable ? "text" : "password"}
+        placeholder={placeholder}
+        {...props}
+      />
+      <Button
+        className="bg-inherit"
+        type="button"
+        variant="outline"
+        size="icon"
+        onClick={() => {
+          setIsVisable((prev) => !prev);
+        }}
+      >
+        {isVisable ? (
+          <Eye className="text-muted-foreground" />
+        ) : (
+          <EyeOff className="text-muted-foreground" />
+        )}
+      </Button>
+    </div>
+  );
+}
+
 AuthForm.HeaderWrapper = FormHeaderWrapper;
 AuthForm.Separator = FormSeparator;
 AuthForm.SubmitButton = FormSubmitButton;
 AuthForm.MainHeader = MainHeader;
 AuthForm.SubHeader = SubHeader;
+AuthForm.PasswordInput = PasswordInput;
