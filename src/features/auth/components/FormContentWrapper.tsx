@@ -15,8 +15,8 @@ export default function FormContentWrapper({
             hero
           </Card>
         </div>
-        <div className="flex h-full w-full max-w-xl items-center justify-center px-2 lg:w-1/2 lg:py-10">
-          <Card className="flex h-full max-h-[800px] w-full items-center justify-center rounded-lg">
+        <div className="flex h-screen w-full max-w-xl items-center justify-center px-2 lg:h-full lg:w-1/2 lg:py-10">
+          <Card className="flex h-full w-full items-center justify-center rounded-lg">
             {children}
           </Card>
         </div>
