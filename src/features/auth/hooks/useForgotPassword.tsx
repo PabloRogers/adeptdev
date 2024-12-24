@@ -9,7 +9,6 @@ import { toast } from "sonner";
 
 import { isAuthApiError } from "@supabase/supabase-js";
 import { z } from "zod";
-import getURL from "../utils/getURL";
 import handleAuthErrors from "../utils/handleAuthErrors";
 
 export default function useForgotPassword() {
@@ -20,7 +19,7 @@ export default function useForgotPassword() {
   ) => {
     toast.promise(
       supabase.auth.resetPasswordForEmail(data.email, {
-        redirectTo: getURL(),
+        redirectTo: "http://localhost:3000/forgot-password/update",
       }),
       {
         loading: "Sending password reset email...",
