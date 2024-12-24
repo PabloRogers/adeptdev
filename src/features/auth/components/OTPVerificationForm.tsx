@@ -14,8 +14,8 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { useMultiStepFormContext } from "@/context/useMultiStepForm";
 import { AuthForm } from "@/features/auth/components/AuthForm";
-import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import {
   RegisterFormDataSchema,
   RegisterFormStep3Schema,

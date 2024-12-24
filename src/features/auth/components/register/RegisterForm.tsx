@@ -1,9 +1,9 @@
 "use client";
 
+import { MultiStepFormContext } from "@/context/useMultiStepForm";
 import MultiStepFormWrapper from "@/features/auth/components/MultiStepFormWrapper";
 import RegisterFormStep1 from "@/features/auth/components/register/RegisterFormStep1";
 import RegisterFormStep2 from "@/features/auth/components/register/RegisterFormStep2";
-import { MultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import { RegisterFormDataSchema } from "@/features/auth/types/register";
 import useMultiStepForm from "@/hooks/useMultiStepForm";
 

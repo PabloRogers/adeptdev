@@ -1,5 +1,5 @@
+import { TUseMultiStepFormReturn } from "@/hooks/useMultiStepForm";
 import { createContext, useContext } from "react";
-import { TUseMultiStepFormReturn } from "../../../hooks/useMultiStepForm";
 
 export const MultiStepFormContext = createContext<
   TUseMultiStepFormReturn<unknown> | undefined

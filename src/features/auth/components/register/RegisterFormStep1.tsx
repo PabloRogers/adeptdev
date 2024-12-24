@@ -9,10 +9,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useMultiStepFormContext } from "@/context/useMultiStepForm";
 import { AuthForm } from "@/features/auth/components/AuthForm";
 import GithubOAuth from "@/features/auth/components/GithubOAuth";
 import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
-import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import {
   RegisterFormDataSchema,
   RegisterFormStep1Schema,

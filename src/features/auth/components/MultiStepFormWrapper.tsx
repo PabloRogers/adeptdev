@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
+import { useMultiStepFormContext } from "@/context/useMultiStepForm";
 import { ArrowLeft } from "react-feather";
 
 interface MultiStepFormWrapperProps {

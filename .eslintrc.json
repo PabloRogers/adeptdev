@@ -86,7 +86,8 @@
           "src/db/**/*",
           "src/hooks/**/*",
           "src/lib/**/*",
-          "src/utils/**/*"
+          "src/utils/**/*",
+          "src/context/**/*"
         ]
       },
       {
