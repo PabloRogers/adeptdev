@@ -9,12 +9,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AuthForm } from "@/features/auth/components/AuthForm";
 import useForgotPassword from "@/features/auth/hooks/useForgotPassword";
 import { UpdatePasswordSchema } from "@/features/auth/types/forgotpassword";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { AuthForm } from "../AuthForm";
 
 export default function UpdatePasswordForm() {
   const { handleUpdatePassword } = useForgotPassword();

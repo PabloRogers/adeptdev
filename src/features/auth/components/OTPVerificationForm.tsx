@@ -14,6 +14,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { AuthForm } from "@/features/auth/components/AuthForm";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import {
   RegisterFormDataSchema,
@@ -22,7 +23,6 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { AuthForm } from "./AuthForm";
 
 export default function OTPVerificationForm() {
   const multiStepForm = useMultiStepFormContext<RegisterFormDataSchema>();

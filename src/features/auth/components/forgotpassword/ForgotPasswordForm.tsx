@@ -9,13 +9,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AuthForm } from "@/features/auth/components/AuthForm";
 import useForgotPassword from "@/features/auth/hooks/useForgotPassword";
 import { ForgotPasswordFormStep1Schema } from "@/features/auth/types/forgotpassword";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { AuthForm } from "../AuthForm";
 
 export default function ForgotPasswordFrom() {
   const { handleResetPasswordForEmail } = useForgotPassword();

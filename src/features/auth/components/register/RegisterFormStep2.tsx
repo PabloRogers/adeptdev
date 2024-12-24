@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AuthForm } from "@/features/auth/components/AuthForm";
 import { useMultiStepFormContext } from "@/features/auth/context/MultiStepForm";
 import useRegister from "@/features/auth/hooks/useRegister";
 import {
@@ -19,7 +20,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { AuthForm } from "../AuthForm";
 
 export default function RegisterStep2() {
   const { handleSignUp } = useRegister();

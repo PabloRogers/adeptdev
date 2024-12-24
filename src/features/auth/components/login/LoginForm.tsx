@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AuthForm } from "@/features/auth/components/AuthForm";
 import GithubOAuth from "@/features/auth/components/GithubOAuth";
 import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
 import useLogin from "@/features/auth/hooks/useLogin";
@@ -17,10 +18,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { AuthForm } from "../AuthForm";
 
 export default function LoginForm() {
   const { handleSignUp } = useLogin();
+
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
