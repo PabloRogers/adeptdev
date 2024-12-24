@@ -2,12 +2,14 @@
 
 import createClient from "@/utils/supabase/client";
 import { isAuthApiError } from "@supabase/supabase-js";
+import { useState } from "react";
 import { toast } from "sonner";
 import { OAuthProvider } from "../types/OAuthProvider";
 import handleAuthErrors from "../utils/handleAuthErrors";
 
 export default function useOAuth(provider: OAuthProvider) {
   const supabase = createClient();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function signInWithOAuthProvider() {
     const response = await supabase.auth.signInWithOAuth({
@@ -21,6 +23,7 @@ export default function useOAuth(provider: OAuthProvider) {
   }
 
   async function handleSignInWithOAuthProvider() {
+    setIsLoading(true);
     toast.promise(signInWithOAuthProvider(), {
       loading: "Logging in...",
       success: ({ error }) => {
@@ -35,5 +38,5 @@ export default function useOAuth(provider: OAuthProvider) {
       },
     });
   }
-  return { handleSignInWithOAuthProvider };
+  return { handleSignInWithOAuthProvider, isLoading };
 }

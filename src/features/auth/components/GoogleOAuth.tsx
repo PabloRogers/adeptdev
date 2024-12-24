@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 
 export default function GoogleOAuth() {
-  const { handleSignInWithOAuthProvider } = useOAuth("google");
+  const { handleSignInWithOAuthProvider, isLoading } = useOAuth("google");
   const form = useForm();
 
   async function onSubmit() {
@@ -14,13 +14,9 @@ export default function GoogleOAuth() {
 
   return (
     <form {...form} onSubmit={form.handleSubmit(onSubmit)}>
-      <Button
-        variant="outline"
-        className="w-full"
-        disabled={form.formState.isSubmitting}
-      >
-        {form.formState.isSubmitting && <Loader2 className="animate-spin" />}
-        {!form.formState.isSubmitting && <FcGoogle className="mr-2 h-5 w-5" />}
+      <Button variant="outline" className="w-full" disabled={isLoading}>
+        {isLoading && <Loader2 className="animate-spin" />}
+        {!isLoading && <FcGoogle className="mr-2 h-5 w-5" />}
         Sign in with Google
       </Button>
     </form>

@@ -10,7 +10,6 @@ export default function GithubOAuth() {
 
   return (
     <Button
-      data-testid="GithubOAuth-button"
       variant="outline"
       className="w-full"
       disabled={isLoading}
