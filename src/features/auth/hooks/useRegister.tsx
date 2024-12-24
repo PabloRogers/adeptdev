@@ -1,12 +1,14 @@
 "use client";
 
+import handleAuthErrors from "@/features/auth/utils/handleAuthErrors";
 import createClient from "@/utils/supabase/client";
 import { isAuthApiError } from "@supabase/supabase-js";
+import { useState } from "react";
 import { toast } from "sonner";
-import handleAuthErrors from "../utils/handleAuthErrors";
 
 export default function useRegister() {
   const supabase = createClient();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function signUp(email: string, password: string) {
     const signUpResponse = await supabase.auth.signUp({
@@ -17,14 +19,16 @@ export default function useRegister() {
   }
 
   async function handleSignUp(email: string, password: string) {
+    setIsLoading(true);
     toast.promise(signUp(email, password), {
       loading: "Sending confirmation email...",
       success: ({ error }) => {
+        setIsLoading(false);
         if (error) throw error;
-
         return `A confirmation link has been sent to ${email}. Check your inbox or spam folder to proceed.`;
       },
       error: (error) => {
+        setIsLoading(false);
         if (isAuthApiError(error)) {
           return handleAuthErrors(error);
         }
@@ -34,5 +38,5 @@ export default function useRegister() {
     });
   }
 
-  return { handleSignUp };
+  return { handleSignUp, isLoading };
 }

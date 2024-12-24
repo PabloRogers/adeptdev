@@ -22,7 +22,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 
 export default function RegisterStep2() {
-  const { handleSignUp } = useRegister();
+  const { handleSignUp, isLoading } = useRegister();
   const router = useRouter();
   const multiStepForm = useMultiStepFormContext<RegisterFormDataSchema>();
 
@@ -127,10 +127,7 @@ export default function RegisterStep2() {
               </FormItem>
             )}
           />
-          <AuthForm.SubmitButton
-            disabled={form.formState.isSubmitting}
-            isloading={form.formState.isSubmitting}
-          >
+          <AuthForm.SubmitButton isloading={isLoading}>
             Continue
           </AuthForm.SubmitButton>
         </form>
