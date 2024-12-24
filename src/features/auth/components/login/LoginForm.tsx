@@ -20,7 +20,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 
 export default function LoginForm() {
-  const { handleSignUp } = useLogin();
+  const { handleSignUp, isLoading } = useLogin();
 
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
@@ -79,10 +79,7 @@ export default function LoginForm() {
               </FormItem>
             )}
           />
-          <AuthForm.SubmitButton
-            disabled={false}
-            isloading={form.formState.isSubmitting}
-          >
+          <AuthForm.SubmitButton isloading={isLoading}>
             Login
           </AuthForm.SubmitButton>
           <div className="mt-4 text-center text-sm text-muted-foreground">
