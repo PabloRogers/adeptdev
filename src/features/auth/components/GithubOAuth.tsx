@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 
 export default function GithubOAuth() {
-  const { isLoading, signInWithOAuthProvider } = useOAuth("github");
+  const { isLoading, handleSignInWithOAuthProvider } = useOAuth("github");
 
   return (
     <Button
@@ -14,7 +14,7 @@ export default function GithubOAuth() {
       variant="outline"
       className="w-full"
       disabled={isLoading}
-      onClick={() => signInWithOAuthProvider()}
+      onClick={() => handleSignInWithOAuthProvider()}
     >
       {isLoading && (
         <Loader2 data-testid="GithubOAuth-loader" className="animate-spin" />
