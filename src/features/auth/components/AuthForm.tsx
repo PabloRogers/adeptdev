@@ -10,7 +10,7 @@ interface AuthFormProps {
   children: React.ReactNode;
 }
 
-export function AuthForm({ children }: AuthFormProps) {
+function AuthForm({ children }: AuthFormProps) {
   return (
     <div className="w-[450px] p-10">
       <div className="w-full space-y-8">{children}</div>
@@ -22,7 +22,7 @@ interface FormHeaderWrapperProps {
   children: React.ReactNode;
 }
 
-export function FormHeaderWrapper({ children }: FormHeaderWrapperProps) {
+function FormHeaderWrapper({ children }: FormHeaderWrapperProps) {
   return <div className="grid gap-2 text-center">{children}</div>;
 }
 
@@ -42,7 +42,7 @@ function SubHeader({ children }: SubHeaderProps) {
   return <p className="text-balance text-muted-foreground">{children}</p>;
 }
 
-export function FormSeparator() {
+function FormSeparator() {
   return (
     <div className="flex items-center justify-center">
       <hr className="flex-grow border-t" />
@@ -58,7 +58,7 @@ interface IFormSubmitButtonProps
   children: React.ReactNode;
 }
 
-export default function FormSubmitButton({
+function FormSubmitButton({
   isloading = false,
   children,
 }: IFormSubmitButtonProps) {
@@ -75,7 +75,7 @@ interface PasswordInputProps extends React.HTMLAttributes<HTMLDivElement> {
   placeholder: string;
 }
 
-export function PasswordInput({ placeholder, ...props }: PasswordInputProps) {
+function PasswordInput({ placeholder, ...props }: PasswordInputProps) {
   const [isVisable, setIsVisable] = useState(false);
   return (
     <div className="flex w-full space-x-1">
@@ -109,3 +109,5 @@ AuthForm.SubmitButton = FormSubmitButton;
 AuthForm.MainHeader = MainHeader;
 AuthForm.SubHeader = SubHeader;
 AuthForm.PasswordInput = PasswordInput;
+
+export default AuthForm;

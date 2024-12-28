@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useMultiStepFormContext } from "@/context/useMultiStepForm";
-import { AuthForm } from "@/features/auth/components/AuthForm";
+import AuthForm from "@/features/auth/components/AuthForm";
 import useRegister from "@/features/auth/hooks/useRegister";
 import {
   RegisterFormDataSchema,

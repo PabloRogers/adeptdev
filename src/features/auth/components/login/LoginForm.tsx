@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { AuthForm } from "@/features/auth/components/AuthForm";
+import AuthForm from "@/features/auth/components/AuthForm";
 import GithubOAuth from "@/features/auth/components/GithubOAuth";
 import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
 import useLogin from "@/features/auth/hooks/useLogin";

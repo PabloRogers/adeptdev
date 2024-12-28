@@ -15,12 +15,8 @@ export default function GithubOAuth() {
       disabled={isLoading}
       onClick={() => handleSignInWithOAuthProvider()}
     >
-      {isLoading && (
-        <Loader2 data-testid="GithubOAuth-loader" className="animate-spin" />
-      )}
-      {!isLoading && (
-        <FaGithub data-testid="GithubOAuth-icon" className="mr-2 h-5 w-5" />
-      )}
+      {isLoading && <Loader2 data-testid="loader" className="animate-spin" />}
+      {!isLoading && <FaGithub data-testid="github" className="mr-2 h-5 w-5" />}
       Sign in with GitHub
     </Button>
   );
