@@ -44,7 +44,7 @@ function SubHeader({ children }: SubHeaderProps) {
 
 function FormSeparator() {
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center" data-testid="separator">
       <hr className="flex-grow border-t" />
       <span className="px-2 text-sm text-neutral-400">or</span>
       <hr className="flex-grow border-t" />
@@ -64,8 +64,8 @@ function FormSubmitButton({
 }: IFormSubmitButtonProps) {
   return (
     <Button className="w-full" type="submit" disabled={isloading}>
-      {isloading && <Loader2 className="animate-spin" />}
-      {!isloading && <LogIn />}
+      {isloading && <Loader2 data-testid="loader" className="animate-spin" />}
+      {!isloading && <LogIn data-testid="login" />}
       {children}
     </Button>
   );
@@ -94,9 +94,9 @@ function PasswordInput({ placeholder, ...props }: PasswordInputProps) {
         }}
       >
         {isVisable ? (
-          <Eye className="text-muted-foreground" />
+          <Eye data-testid="eye" className="text-muted-foreground" />
         ) : (
-          <EyeOff className="text-muted-foreground" />
+          <EyeOff data-testid="eyeOff" className="text-muted-foreground" />
         )}
       </Button>
     </div>
