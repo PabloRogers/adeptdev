@@ -38,6 +38,13 @@
     "react/require-default-props": "off",
     "react/jsx-props-no-spreading": "off",
     "react/react-in-jsx-scope": "off",
+    // Custom rule: Enforce the use of alias for `@`
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": ["../*", "./*"] // Disallow relative paths
+      }
+    ],
     "boundaries/no-unknown": ["error"],
     "boundaries/no-unknown-files": ["error"],
     "boundaries/element-types": [
