@@ -1,31 +1,30 @@
 "use client";
 
+import { OAuthProvider } from "@/features/auth/types/OAuthProvider";
+import handleAuthErrors from "@/features/auth/utils/handleAuthErrors";
 import createClient from "@/utils/supabase/client";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { useState } from "react";
-import { OAuthProvider } from "../types/OAuthProvider";
-import handleAuthErrors from "../utils/handleAuthErrors";
+import { toast } from "sonner";
 
 export default function useOAuth(provider: OAuthProvider) {
   const supabase = createClient();
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleSignInWithOAuthProvider() {
-    try {
-      setIsLoading(true);
-      const response = await supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo: "http://localhost:3000/callback",
-        },
-      });
-      return response;
-    } catch (error) {
-      setIsLoading(false);
+    setIsLoading(true);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: "http://localhost:3000/callback",
+      },
+    });
+    if (error) {
       if (isAuthApiError(error)) {
-        return handleAuthErrors(error);
+        handleAuthErrors(error);
+      } else {
+        toast("An unexpected error occurred. Please try again.");
       }
-      return "An unexpected error occurred. Please try again.";
     }
   }
 
