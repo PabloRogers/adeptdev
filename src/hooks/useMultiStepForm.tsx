@@ -1,25 +1,10 @@
+import UseMultiStepForm from "@/types/UseMultiStepForm";
 import { useCallback, useState } from "react";
-
-export interface TUseMultiStepFormReturn<T> {
-  currentStepIndex: number;
-  steps: React.ReactElement[];
-  step: React.ReactElement;
-  formData: T;
-  isFirstStep: boolean;
-  isLastStep: boolean;
-  length: number;
-  goTo: (index: number) => void;
-  nextStep: () => void;
-  backStep: () => void;
-  setSteps: (newSteps: React.ReactElement[]) => void;
-  setData: (newFormData: Partial<T>) => void;
-  getData: () => T;
-}
 
 export default function useMultiStepForm<T>(
   initialFormData: T,
   initialSteps: React.ReactElement[],
-): TUseMultiStepFormReturn<T> {
+): UseMultiStepForm<T> {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [steps, setStepsState] = useState<React.ReactElement[]>(initialSteps);
   const [formData, setFormData] = useState<T>(initialFormData);
