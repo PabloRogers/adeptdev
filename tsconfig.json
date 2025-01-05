@@ -26,6 +26,9 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/__tests__/**/*",
     ".next/types/**/*.ts",
     "commitlint.config.js",
     "jest.config.ts"
