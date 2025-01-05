@@ -20,7 +20,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 
 export default function LoginForm() {
-  const { handleSignUp, isLoading } = useLogin();
+  const { handleLogin, isLoading } = useLogin();
 
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
@@ -31,7 +31,7 @@ export default function LoginForm() {
   });
 
   return (
-    <AuthForm>
+    <AuthForm data-testid="LoginForm">
       <AuthForm.HeaderWrapper>
         <AuthForm.MainHeader>Login</AuthForm.MainHeader>
         <AuthForm.SubHeader>
@@ -44,7 +44,7 @@ export default function LoginForm() {
       </div>
       <AuthForm.Separator />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSignUp)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(handleLogin)} className="space-y-4">
           <FormField
             control={form.control}
             name="email"

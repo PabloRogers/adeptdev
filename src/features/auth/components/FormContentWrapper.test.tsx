@@ -8,6 +8,7 @@ describe("FormContentWrapper", () => {
       const image = screen.getByText("hero");
       expect(image).toBeInTheDocument();
     });
+
     it("should render children", () => {
       render(<FormContentWrapper>children</FormContentWrapper>);
       const children = screen.getByText("children");

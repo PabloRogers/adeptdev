@@ -1,6 +1,6 @@
 "use client";
 
-import { MultiStepFormContext } from "@/context/useMultiStepForm";
+import MultiStepFormContext from "@/context/useMultiStepForm";
 import MultiStepFormWrapper from "@/features/auth/components/MultiStepFormWrapper";
 import RegisterFormStep1 from "@/features/auth/components/register/RegisterFormStep1";
 import RegisterFormStep2 from "@/features/auth/components/register/RegisterFormStep2";
@@ -28,8 +28,10 @@ export default function RegisterForm() {
   );
 
   return (
-    <MultiStepFormContext.Provider value={multiStepForm}>
-      <MultiStepFormWrapper>{multiStepForm.step}</MultiStepFormWrapper>
-    </MultiStepFormContext.Provider>
+    <div data-testid="RegisterForm">
+      <MultiStepFormContext.Provider value={multiStepForm}>
+        <MultiStepFormWrapper>{multiStepForm.step}</MultiStepFormWrapper>
+      </MultiStepFormContext.Provider>
+    </div>
   );
 }

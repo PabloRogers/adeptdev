@@ -13,8 +13,11 @@ export default function GoogleOAuth() {
       disabled={isLoading}
       onClick={() => handleSignInWithOAuthProvider()}
     >
-      {isLoading && <Loader2 data-testid="loader" className="animate-spin" />}
-      {!isLoading && <FcGoogle data-testid="google" className="mr-2 h-5 w-5" />}
+      {isLoading ? (
+        <Loader2 data-testid="loader" className="animate-spin" />
+      ) : (
+        <FcGoogle data-testid="google" className="mr-2 h-5 w-5" />
+      )}
       Sign in with Google
     </Button>
   );

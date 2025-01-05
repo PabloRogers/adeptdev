@@ -44,11 +44,13 @@ describe("AuthForm", () => {
         const button = screen.getByRole("button");
         expect(button).toBeInTheDocument();
       });
+
       it("should render children", () => {
         render(<AuthForm.SubmitButton>children</AuthForm.SubmitButton>);
         const children = screen.getByText("children");
         expect(children).toBeInTheDocument();
       });
+
       it("should be enabled if isLoading is false", () => {
         render(
           <AuthForm.SubmitButton isloading={false}>
@@ -58,6 +60,7 @@ describe("AuthForm", () => {
         const button = screen.getByRole("button");
         expect(button).toBeEnabled();
       });
+
       it("should be disabled if isLoading is true", () => {
         render(
           <AuthForm.SubmitButton isloading>children</AuthForm.SubmitButton>,
@@ -66,11 +69,13 @@ describe("AuthForm", () => {
         expect(button).toBeDisabled();
       });
     });
+
     it("should render loader if isLoading is true", () => {
       render(<AuthForm.SubmitButton isloading>children</AuthForm.SubmitButton>);
       const loader = screen.getByTestId("loader");
       expect(loader).toBeInTheDocument();
     });
+
     it("should not render loader if isLoading is false", () => {
       render(
         <AuthForm.SubmitButton isloading={false}>
@@ -80,6 +85,7 @@ describe("AuthForm", () => {
       const loader = screen.queryByTestId("loader");
       expect(loader).not.toBeInTheDocument();
     });
+
     it("should render login icon when isLoading is false", () => {
       render(
         <AuthForm.SubmitButton isloading={false}>
@@ -89,6 +95,7 @@ describe("AuthForm", () => {
       const login = screen.getByTestId("login");
       expect(login).toBeInTheDocument();
     });
+
     it("should not render login icon when isLoading is true", () => {
       render(<AuthForm.SubmitButton isloading>children</AuthForm.SubmitButton>);
       const login = screen.queryByTestId("login");
@@ -102,21 +109,25 @@ describe("AuthForm", () => {
         const input = screen.getByPlaceholderText(/password/i);
         expect(input).toBeInTheDocument();
       });
+
       it("should render placeholder", () => {
         render(<AuthForm.PasswordInput placeholder="Password" />);
         const input = screen.getByPlaceholderText("Password");
         expect(input).toBeInTheDocument();
       });
+
       it("should render eye off icon", () => {
         render(<AuthForm.PasswordInput placeholder="Password" />);
         const icon = screen.getByTestId("eyeOff");
         expect(icon).toBeInTheDocument();
       });
+
       it("should not render eye icon", () => {
         render(<AuthForm.PasswordInput placeholder="Password" />);
         const icon = screen.queryByTestId("eye");
         expect(icon).not.toBeInTheDocument();
       });
+
       it("should have type password by default", () => {
         render(<AuthForm.PasswordInput placeholder="Password" />);
         const input = screen.getByPlaceholderText(/password/i);
@@ -134,6 +145,7 @@ describe("AuthForm", () => {
 
         expect(input).toHaveAttribute("type", "text");
       });
+
       it("should show eye icon on button click", async () => {
         const user = userEvent.setup();
         render(<AuthForm.PasswordInput placeholder="Password" />);

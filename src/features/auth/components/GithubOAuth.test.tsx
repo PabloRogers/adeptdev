@@ -31,11 +31,23 @@ describe("GithubOAuth", () => {
     it("should render github icon when isLoading is false", () => {
       mockUseOAuth.mockReturnValue({
         handleSignInWithOAuthProvider: mockedHandleSignIn,
-        isLoading: false,
+        isLoading: false, // Explicitly set isLoading to false
       });
       render(<GithubOAuth />);
-      const icon = screen.getByTestId("github");
-      expect(icon).toBeInTheDocument();
+
+      // Assert that the GitHub icon is rendered
+      const githubIcon = screen.getByTestId("github");
+      expect(githubIcon).toBeInTheDocument();
+    });
+
+    it("should not render github icon when isLoading is true", () => {
+      mockUseOAuth.mockReturnValue({
+        handleSignInWithOAuthProvider: mockedHandleSignIn,
+        isLoading: true,
+      });
+      render(<GithubOAuth />);
+      const icon = screen.queryByTestId("github");
+      expect(icon).not.toBeInTheDocument();
     });
 
     it("should not render loader when isLoading is false", () => {
@@ -47,6 +59,7 @@ describe("GithubOAuth", () => {
       const loader = screen.queryByTestId("loader");
       expect(loader).not.toBeInTheDocument();
     });
+
     it("should be enabled if isLoading is false", () => {
       mockUseOAuth.mockReturnValue({
         handleSignInWithOAuthProvider: mockedHandleSignIn,
@@ -56,6 +69,7 @@ describe("GithubOAuth", () => {
       const button = screen.getByRole("button");
       expect(button).toBeEnabled();
     });
+
     it("should disable button when isLoading is true", () => {
       mockUseOAuth.mockReturnValue({
         handleSignInWithOAuthProvider: mockedHandleSignIn,
@@ -65,6 +79,7 @@ describe("GithubOAuth", () => {
       const button = screen.getByRole("button");
       expect(button).toBeDisabled();
     });
+
     it("should render loader when isLoading is true", () => {
       mockUseOAuth.mockReturnValue({
         handleSignInWithOAuthProvider: mockedHandleSignIn,
@@ -73,15 +88,6 @@ describe("GithubOAuth", () => {
       render(<GithubOAuth />);
       const loader = screen.getByTestId("loader");
       expect(loader).toBeInTheDocument();
-    });
-    it("should not render github icon when isLoading is true", () => {
-      mockUseOAuth.mockReturnValue({
-        handleSignInWithOAuthProvider: mockedHandleSignIn,
-        isLoading: true,
-      });
-      render(<GithubOAuth />);
-      const icon = screen.queryByTestId("github");
-      expect(icon).not.toBeInTheDocument();
     });
   });
 

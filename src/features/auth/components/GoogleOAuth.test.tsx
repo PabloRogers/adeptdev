@@ -47,6 +47,7 @@ describe("GoogleOAuth", () => {
       const loader = screen.queryByTestId("loader");
       expect(loader).not.toBeInTheDocument();
     });
+
     it("should be enabled if isLoading is false", () => {
       mockUseOAuth.mockReturnValue({
         handleSignInWithOAuthProvider: mockedHandleSignIn,
@@ -56,6 +57,7 @@ describe("GoogleOAuth", () => {
       const button = screen.getByRole("button");
       expect(button).toBeEnabled();
     });
+
     it("should disable button when isLoading is true", () => {
       mockUseOAuth.mockReturnValue({
         handleSignInWithOAuthProvider: mockedHandleSignIn,
@@ -65,6 +67,7 @@ describe("GoogleOAuth", () => {
       const button = screen.getByRole("button");
       expect(button).toBeDisabled();
     });
+
     it("should render loader when isLoading is true", () => {
       mockUseOAuth.mockReturnValue({
         handleSignInWithOAuthProvider: mockedHandleSignIn,
@@ -74,6 +77,7 @@ describe("GoogleOAuth", () => {
       const loader = screen.getByTestId("loader");
       expect(loader).toBeInTheDocument();
     });
+
     it("should not render google icon when isLoading is true", () => {
       mockUseOAuth.mockReturnValue({
         handleSignInWithOAuthProvider: mockedHandleSignIn,

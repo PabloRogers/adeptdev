@@ -4,63 +4,76 @@ import {
   ForgotPasswordFormStep1Schema,
   UpdatePasswordSchema,
 } from "@/features/auth/types/forgotpassword";
+import handleAuthErrors from "@/features/auth/utils/handleAuthErrors";
 import createClient from "@/utils/supabase/client";
-import { toast } from "sonner";
-
 import { isAuthApiError } from "@supabase/supabase-js";
+import { useState } from "react";
+import { toast } from "sonner";
 import { z } from "zod";
-import handleAuthErrors from "../utils/handleAuthErrors";
 
 export default function useForgotPassword() {
   const supabase = createClient();
+  const [isResetLoading, setIsResetLoading] = useState(false);
+  const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 
-  const handleResetPasswordForEmail = async (
+  async function resetPassword(
     data: z.infer<typeof ForgotPasswordFormStep1Schema>,
-  ) => {
-    toast.promise(
-      supabase.auth.resetPasswordForEmail(data.email, {
+  ) {
+    try {
+      setIsResetLoading(true);
+      const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
         redirectTo: "http://localhost:3000/forgot-password/update",
-      }),
-      {
-        loading: "Sending password reset email...",
-        success: ({ error }) => {
-          if (error) throw error;
+      });
+      if (error) throw error;
+    } finally {
+      setIsResetLoading(false);
+    }
+  }
 
-          return `A password reset link has been sent to ${data.email}. Check your inbox or spam folder to proceed.`;
-        },
-        error: (error) => {
-          if (isAuthApiError(error)) {
-            return handleAuthErrors(error);
-          }
-          return "An unexpected error occurred. Please try again.";
-        },
+  function handleResetPassword(
+    data: z.infer<typeof ForgotPasswordFormStep1Schema>,
+  ) {
+    toast.promise(resetPassword(data), {
+      loading: "Sending password reset email...",
+      success: `A password reset link has been sent to ${data.email}. Check your inbox or spam folder to proceed.`,
+      error: (error) => {
+        if (isAuthApiError(error)) {
+          return handleAuthErrors(error);
+        }
+        return "An unexpected error occurred. Please try again.";
       },
-    );
-  };
+    });
+  }
 
-  const handleUpdatePassword = async (
-    data: z.infer<typeof UpdatePasswordSchema>,
-  ) => {
-    toast.promise(
-      supabase.auth.updateUser({
+  async function updatePassword(data: z.infer<typeof UpdatePasswordSchema>) {
+    try {
+      setIsUpdateLoading(true);
+      const { error } = await supabase.auth.updateUser({
         password: data.password,
-      }),
-      {
-        loading: "Updating password...",
-        success: ({ error }) => {
-          if (error) throw error;
+      });
+      if (error) throw error;
+    } finally {
+      setIsUpdateLoading(false);
+    }
+  }
 
-          return "Password updated successfully!";
-        },
-        error: (error) => {
-          if (isAuthApiError(error)) {
-            return handleAuthErrors(error);
-          }
-          return "An unexpected error occurred. Please try again.";
-        },
+  function handleUpdatePassword(data: z.infer<typeof UpdatePasswordSchema>) {
+    toast.promise(updatePassword(data), {
+      loading: "Updating password...",
+      success: "Password updated successfully!",
+      error: (error) => {
+        if (isAuthApiError(error)) {
+          return handleAuthErrors(error);
+        }
+        return "An unexpected error occurred. Please try again.";
       },
-    );
-  };
+    });
+  }
 
-  return { handleResetPasswordForEmail, handleUpdatePassword };
+  return {
+    handleResetPassword,
+    isResetLoading,
+    handleUpdatePassword,
+    isUpdateLoading,
+  };
 }

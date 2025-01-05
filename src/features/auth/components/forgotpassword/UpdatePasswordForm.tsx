@@ -8,7 +8,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import AuthForm from "@/features/auth/components/AuthForm";
 import useForgotPassword from "@/features/auth/hooks/useForgotPassword";
 import { UpdatePasswordSchema } from "@/features/auth/types/forgotpassword";
@@ -28,7 +27,7 @@ export default function UpdatePasswordForm() {
   });
 
   return (
-    <AuthForm>
+    <AuthForm data-testid="UpdatePasswordForm">
       <AuthForm.HeaderWrapper>
         <AuthForm.MainHeader>Update Password</AuthForm.MainHeader>
         <AuthForm.SubHeader>
@@ -45,11 +44,10 @@ export default function UpdatePasswordForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>New Password</FormLabel>
                 <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Enter your password"
+                  <AuthForm.PasswordInput
+                    placeholder="Enter your new password"
                     {...field}
                   />
                 </FormControl>
@@ -63,11 +61,9 @@ export default function UpdatePasswordForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
-
                 <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Confirm your Password"
+                  <AuthForm.PasswordInput
+                    placeholder="Confirm Your Password"
                     {...field}
                   />
                 </FormControl>

@@ -3,16 +3,16 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import { Eye, EyeOff, LogIn } from "react-feather";
 
-interface AuthFormProps {
+interface AuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-function AuthForm({ children }: AuthFormProps) {
+function AuthForm({ children, ...props }: AuthFormProps) {
   return (
-    <div className="w-[450px] p-10">
+    <div className="w-[450px] p-10" {...props}>
       <div className="w-full space-y-8">{children}</div>
     </div>
   );
@@ -74,34 +74,35 @@ function FormSubmitButton({
 interface PasswordInputProps extends React.HTMLAttributes<HTMLDivElement> {
   placeholder: string;
 }
+const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
+  ({ placeholder, ...props }, ref) => {
+    const [isVisible, setIsVisible] = useState(false);
 
-function PasswordInput({ placeholder, ...props }: PasswordInputProps) {
-  const [isVisable, setIsVisable] = useState(false);
-  return (
-    <div className="flex w-full space-x-1">
-      <Input
-        type={isVisable ? "text" : "password"}
-        placeholder={placeholder}
-        {...props}
-      />
-      <Button
-        className="bg-inherit"
-        type="button"
-        variant="outline"
-        size="icon"
-        onClick={() => {
-          setIsVisable((prev) => !prev);
-        }}
-      >
-        {isVisable ? (
-          <Eye data-testid="eye" className="text-muted-foreground" />
-        ) : (
-          <EyeOff data-testid="eyeOff" className="text-muted-foreground" />
-        )}
-      </Button>
-    </div>
-  );
-}
+    return (
+      <div className="flex w-full space-x-1">
+        <Input
+          type={isVisible ? "text" : "password"}
+          placeholder={placeholder}
+          ref={ref} // Pass the forwarded ref here
+          {...props}
+        />
+        <Button
+          className="bg-inherit"
+          type="button"
+          variant="outline"
+          size="icon"
+          onClick={() => setIsVisible((prev) => !prev)}
+        >
+          {isVisible ? (
+            <Eye data-testid="eye" className="text-muted-foreground" />
+          ) : (
+            <EyeOff data-testid="eyeOff" className="text-muted-foreground" />
+          )}
+        </Button>
+      </div>
+    );
+  },
+);
 
 AuthForm.HeaderWrapper = FormHeaderWrapper;
 AuthForm.Separator = FormSeparator;

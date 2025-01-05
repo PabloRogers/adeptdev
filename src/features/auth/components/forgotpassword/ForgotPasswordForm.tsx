@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 
 export default function ForgotPasswordFrom() {
-  const { handleResetPasswordForEmail } = useForgotPassword();
+  const { handleResetPassword } = useForgotPassword();
 
   const form = useForm<z.infer<typeof ForgotPasswordFormStep1Schema>>({
     resolver: zodResolver(ForgotPasswordFormStep1Schema),
@@ -28,11 +28,11 @@ export default function ForgotPasswordFrom() {
   });
 
   function onSubmit(data: z.infer<typeof ForgotPasswordFormStep1Schema>) {
-    handleResetPasswordForEmail({ email: data.email });
+    handleResetPassword({ email: data.email });
   }
 
   return (
-    <AuthForm>
+    <AuthForm data-testid="ForgotPasswordForm">
       <AuthForm.HeaderWrapper>
         <AuthForm.MainHeader>Forgot Password</AuthForm.MainHeader>
         <AuthForm.SubHeader>

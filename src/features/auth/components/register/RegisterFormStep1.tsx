@@ -9,7 +9,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useMultiStepFormContext } from "@/context/useMultiStepForm";
 import AuthForm from "@/features/auth/components/AuthForm";
 import GithubOAuth from "@/features/auth/components/GithubOAuth";
 import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
@@ -17,6 +16,7 @@ import {
   RegisterFormDataSchema,
   RegisterFormStep1Schema,
 } from "@/features/auth/types/register";
+import useMultiStepFormContext from "@/hooks/useMultiStepFormContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";

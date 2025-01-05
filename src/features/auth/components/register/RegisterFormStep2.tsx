@@ -9,13 +9,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useMultiStepFormContext } from "@/context/useMultiStepForm";
 import AuthForm from "@/features/auth/components/AuthForm";
 import useRegister from "@/features/auth/hooks/useRegister";
 import {
   RegisterFormDataSchema,
   RegisterFormStep2Schema,
 } from "@/features/auth/types/register";
+import useMultiStepFormContext from "@/hooks/useMultiStepFormContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -43,7 +43,7 @@ export default function RegisterStep2() {
   }
 
   return (
-    <AuthForm>
+    <AuthForm data-testid="RegisterFormStep2">
       <AuthForm.HeaderWrapper>
         <AuthForm.MainHeader>Register</AuthForm.MainHeader>
         <AuthForm.SubHeader>
@@ -97,9 +97,13 @@ export default function RegisterStep2() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Enter Password</FormLabel>
+
                 <FormControl>
-                  <AuthForm.PasswordInput placeholder="Password" {...field} />
+                  <AuthForm.PasswordInput
+                    placeholder="Enter your password."
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -114,7 +118,7 @@ export default function RegisterStep2() {
 
                 <FormControl>
                   <AuthForm.PasswordInput
-                    placeholder="Confirm Password"
+                    placeholder="Confirm your password."
                     {...field}
                   />
                 </FormControl>
