@@ -2,11 +2,17 @@
 
 import { Button } from "@/components/ui/button";
 import useOAuth from "@/features/auth/hooks/useOAuth";
+import { OAuthProviders } from "@/features/auth/types/OAuthProviders";
 import { Loader2 } from "lucide-react";
-import { FaGithub } from "react-icons/fa";
 
-export default function GithubOAuth() {
-  const { isLoading, handleSignInWithOAuthProvider } = useOAuth("github");
+interface OAuthProps {
+  provider: OAuthProviders;
+  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  text: string;
+}
+
+export default function OAuth({ provider, Icon, text }: OAuthProps) {
+  const { isLoading, handleSignInWithOAuthProvider } = useOAuth(provider);
 
   return (
     <Button
@@ -18,9 +24,9 @@ export default function GithubOAuth() {
       {isLoading ? (
         <Loader2 data-testid="loader" className="animate-spin" />
       ) : (
-        <FaGithub data-testid="github" className="mr-2 h-5 w-5" />
+        <Icon data-testid="github" className="mr-2 h-5 w-5" />
       )}
-      Sign in with GitHub
+      {text}
     </Button>
   );
 }

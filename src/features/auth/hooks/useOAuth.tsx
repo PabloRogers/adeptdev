@@ -1,13 +1,13 @@
 "use client";
 
-import { OAuthProvider } from "@/features/auth/types/OAuthProvider";
+import { OAuthProviders } from "@/features/auth/types/OAuthProviders";
 import handleAuthErrors from "@/features/auth/utils/handleAuthErrors";
 import createClient from "@/utils/supabase/client";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export default function useOAuth(provider: OAuthProvider) {
+export default function useOAuth(provider: OAuthProviders) {
   const supabase = createClient();
   const [isLoading, setIsLoading] = useState(false);
 
