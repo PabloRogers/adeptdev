@@ -10,21 +10,25 @@ import {
 } from "@/components/ui/form";
 import AuthForm from "@/features/auth/components/AuthForm";
 import useForgotPassword from "@/features/auth/hooks/useForgotPassword";
-import { UpdatePasswordSchema } from "@/features/auth/types/forgotpassword";
+import { UpdatePasswordFormSchema } from "@/features/auth/types/forgotpassword";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
 export default function UpdatePasswordForm() {
-  const { handleUpdatePassword } = useForgotPassword();
+  const { handleUpdatePassword, isUpdatePasswordLoading } = useForgotPassword();
 
-  const form = useForm<z.infer<typeof UpdatePasswordSchema>>({
-    resolver: zodResolver(UpdatePasswordSchema),
+  const form = useForm<z.infer<typeof UpdatePasswordFormSchema>>({
+    resolver: zodResolver(UpdatePasswordFormSchema),
     defaultValues: {
-      password: "",
+      newPassword: "",
       confirmPassword: "",
     },
   });
+
+  function onSubmit(data: z.infer<typeof UpdatePasswordFormSchema>) {
+    handleUpdatePassword(data.confirmPassword);
+  }
 
   return (
     <AuthForm data-testid="UpdatePasswordForm">
@@ -35,13 +39,10 @@ export default function UpdatePasswordForm() {
         </AuthForm.SubHeader>
       </AuthForm.HeaderWrapper>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handleUpdatePassword)}
-          className="space-y-4"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
-            name="password"
+            name="newPassword"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>New Password</FormLabel>
@@ -71,10 +72,7 @@ export default function UpdatePasswordForm() {
               </FormItem>
             )}
           />
-          <AuthForm.SubmitButton
-            disabled={form.formState.isSubmitting}
-            isloading={form.formState.isSubmitting}
-          >
+          <AuthForm.SubmitButton isloading={isUpdatePasswordLoading}>
             Reset Password
           </AuthForm.SubmitButton>
         </form>

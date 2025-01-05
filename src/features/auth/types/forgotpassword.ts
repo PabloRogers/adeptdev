@@ -1,11 +1,9 @@
 import { z } from "zod";
 
-export type ForgotPasswordFormDataSchema = {
+export type ForgotPasswordSchema = {
   email: string;
-};
-
-export type UpdatepasswordFormDataSchema = {
-  password: string;
+  oneTimePassword: string;
+  newPassword: string;
   confirmPassword: string;
 };
 
@@ -16,16 +14,22 @@ export const ForgotPasswordFormStep1Schema = z.object({
     .min(1, { message: "Email is required." }),
 });
 
-export const UpdatePasswordSchema = z
+export const OTPVerificationFormSchema = z.object({
+  oneTimePassword: z.string().min(5, {
+    message: "Username must be at least 2 characters.",
+  }),
+});
+
+export const UpdatePasswordFormSchema = z
   .object({
-    password: z.string().min(6, {
+    newPassword: z.string().min(6, {
       message: "Password must be at least 6 characters.",
     }),
     confirmPassword: z.string().min(6, {
       message: "Password must be at least 6 characters.",
     }),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Passwords do not match.",
     path: ["confirmPassword"],
   });

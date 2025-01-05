@@ -1,79 +1,78 @@
 "use client";
 
-import {
-  ForgotPasswordFormStep1Schema,
-  UpdatePasswordSchema,
-} from "@/features/auth/types/forgotpassword";
 import handleAuthErrors from "@/features/auth/utils/handleAuthErrors";
 import createClient from "@/utils/supabase/client";
 import { isAuthApiError } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { z } from "zod";
 
 export default function useForgotPassword() {
   const supabase = createClient();
-  const [isResetLoading, setIsResetLoading] = useState(false);
-  const [isUpdateLoading, setIsUpdateLoading] = useState(false);
+  const router = useRouter();
+  const [isMagicLinkLoading, setIsMagicLinkLoading] = useState(false);
+  const [isUpdatePasswordLoading, setIsUpdatePasswordLoading] = useState(false);
 
-  async function resetPassword(
-    data: z.infer<typeof ForgotPasswordFormStep1Schema>,
-  ) {
+  async function sendMagicLink(email: string) {
     try {
-      setIsResetLoading(true);
-      const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
-        redirectTo: "http://localhost:3000/callback",
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: "http://localhost:3000/forgot-password/callback",
+          shouldCreateUser: false,
+        },
       });
       if (error) throw error;
     } finally {
-      setIsResetLoading(false);
+      setIsMagicLinkLoading(false);
     }
   }
 
-  function handleResetPassword(
-    data: z.infer<typeof ForgotPasswordFormStep1Schema>,
-  ) {
-    toast.promise(resetPassword(data), {
-      loading: "Sending password reset email...",
-      success: `A password reset link has been sent to ${data.email}. Check your inbox or spam folder to proceed.`,
+  function handleSendMagicLink(email: string) {
+    toast.promise(sendMagicLink(email), {
+      loading: "Sending verification code...",
+      success: `Verification code sent to ${email}`,
       error: (error) => {
         if (isAuthApiError(error)) {
           return handleAuthErrors(error);
         }
-        return "An unexpected error occurred. Please try again.";
+        return "An error occurred while sending the verification code. Please try again.";
       },
     });
   }
 
-  async function updatePassword(data: z.infer<typeof UpdatePasswordSchema>) {
+  async function updatePassword(password: string) {
     try {
-      setIsUpdateLoading(true);
+      setIsUpdatePasswordLoading(true);
       const { error } = await supabase.auth.updateUser({
-        password: data.password,
+        password,
       });
       if (error) throw error;
     } finally {
-      setIsUpdateLoading(false);
+      setIsUpdatePasswordLoading(false);
     }
   }
 
-  function handleUpdatePassword(data: z.infer<typeof UpdatePasswordSchema>) {
-    toast.promise(updatePassword(data), {
+  function handleUpdatePassword(password: string) {
+    toast.promise(updatePassword(password), {
       loading: "Updating password...",
-      success: "Password updated successfully!",
+      success: () => {
+        router.push("/");
+        return "Password updated successfully";
+      },
       error: (error) => {
         if (isAuthApiError(error)) {
           return handleAuthErrors(error);
         }
-        return "An unexpected error occurred. Please try again.";
+        return "An error occurred while updating the password. Please try again.";
       },
     });
   }
 
   return {
-    handleResetPassword,
-    isResetLoading,
+    handleSendMagicLink,
+    isMagicLinkLoading,
     handleUpdatePassword,
-    isUpdateLoading,
+    isUpdatePasswordLoading,
   };
 }

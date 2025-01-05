@@ -17,18 +17,17 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
-export default function ForgotPasswordFrom() {
-  const { handleResetPassword } = useForgotPassword();
-
+export default function EmailForm() {
   const form = useForm<z.infer<typeof ForgotPasswordFormStep1Schema>>({
     resolver: zodResolver(ForgotPasswordFormStep1Schema),
     defaultValues: {
       email: "",
     },
   });
+  const { handleSendMagicLink, isMagicLinkLoading } = useForgotPassword();
 
-  function onSubmit(data: z.infer<typeof ForgotPasswordFormStep1Schema>) {
-    handleResetPassword({ email: data.email });
+  async function onSubmit(data: z.infer<typeof ForgotPasswordFormStep1Schema>) {
+    handleSendMagicLink(data.email);
   }
 
   return (
@@ -54,10 +53,7 @@ export default function ForgotPasswordFrom() {
               </FormItem>
             )}
           />
-          <AuthForm.SubmitButton
-            disabled={form.formState.isSubmitting}
-            isloading={form.formState.isSubmitting}
-          >
+          <AuthForm.SubmitButton isloading={isMagicLinkLoading}>
             Continue
           </AuthForm.SubmitButton>
           <div className="mt-4 text-center text-sm text-muted-foreground">

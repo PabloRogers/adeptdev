@@ -1,4 +1,4 @@
-import ForgotPasswordForm from "@/features/auth/components/forgotpassword/ForgotPasswordForm";
+import EmailForm from "@/features/auth/components/forgotpassword/EmailForm";
 import useForgotPassword from "@/features/auth/hooks/useForgotPassword";
 import { render, screen, userEvent } from "@/utils/test";
 
@@ -16,19 +16,19 @@ mockUseForgotPassword.mockReturnValue({
 describe("ForgotPasswordForm", () => {
   describe("Rendering", () => {
     it("should render the component", () => {
-      render(<ForgotPasswordForm />);
+      render(<EmailForm />);
       const component = screen.getByTestId("ForgotPasswordForm");
       expect(component).toBeInTheDocument();
     });
 
     it("should render header", () => {
-      render(<ForgotPasswordForm />);
+      render(<EmailForm />);
       const header = screen.getByRole("heading", { name: /forgot password/i });
       expect(header).toBeInTheDocument();
     });
 
     it("should render sub header", () => {
-      render(<ForgotPasswordForm />);
+      render(<EmailForm />);
       const subHeader = screen.getByText(
         /please provide the email address associated with your account\./i,
       );
@@ -36,19 +36,19 @@ describe("ForgotPasswordForm", () => {
     });
 
     it("should render email input", () => {
-      render(<ForgotPasswordForm />);
+      render(<EmailForm />);
       const emailInput = screen.getByRole("textbox", { name: /email/i });
       expect(emailInput).toBeInTheDocument();
     });
 
     it("should render submit button", () => {
-      render(<ForgotPasswordForm />);
+      render(<EmailForm />);
       const submitButton = screen.getByRole("button", { name: /continue/i });
       expect(submitButton).toBeInTheDocument();
     });
 
     it("should render login link", () => {
-      render(<ForgotPasswordForm />);
+      render(<EmailForm />);
       const loginLink = screen.getByRole("link", { name: /login/i });
       expect(loginLink).toBeInTheDocument();
     });
@@ -56,7 +56,7 @@ describe("ForgotPasswordForm", () => {
   describe("Behavior", () => {
     it("should call handleResetPassword on submit", async () => {
       const user = userEvent.setup();
-      render(<ForgotPasswordForm />);
+      render(<EmailForm />);
 
       // Required for form validation
       const emailInput = screen.getByRole("textbox", { name: /email/i });

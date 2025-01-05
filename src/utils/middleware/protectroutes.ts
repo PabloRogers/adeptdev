@@ -5,6 +5,7 @@ const authRoutes = [
   "/login",
   "/register",
   "/forgot-password/email",
+  "/forgot-password/callback",
   "/callback",
 ];
 
