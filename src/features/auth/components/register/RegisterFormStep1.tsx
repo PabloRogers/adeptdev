@@ -10,8 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import AuthForm from "@/features/auth/components/AuthForm";
-import GithubOAuth from "@/features/auth/components/GithubOAuth";
-import GoogleOAuth from "@/features/auth/components/GoogleOAuth";
+import OAuth from "@/features/auth/components/OAuth";
 import {
   RegisterFormDataSchema,
   RegisterFormStep1Schema,
@@ -20,6 +19,8 @@ import useMultiStepFormContext from "@/hooks/useMultiStepFormContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import z from "zod";
 
 export default function RegisterStep1() {
@@ -46,8 +47,8 @@ export default function RegisterStep1() {
         </AuthForm.SubHeader>
       </AuthForm.HeaderWrapper>
       <div className="space-y-2">
-        <GithubOAuth />
-        <GoogleOAuth />
+        <OAuth provider="github" Icon={FaGithub} text="Sign in with Github" />
+        <OAuth provider="google" Icon={FcGoogle} text="Sign in with Google" />
       </div>
       <AuthForm.Separator />
       <Form {...form}>
