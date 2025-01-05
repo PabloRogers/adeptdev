@@ -1,5 +1,5 @@
 import ThemeProvider from "@/components/providers/ThemeProvider";
-import { Toaster } from "sonner";
+import Toaster from "@/components/providers/Toaster";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -9,12 +9,12 @@ export default function Providers({ children }: ProvidersProps) {
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="dark"
+      defaultTheme="system"
       enableSystem
       disableTransitionOnChange
     >
       {children}
-      <Toaster richColors />
+      <Toaster />
     </ThemeProvider>
   );
 }
