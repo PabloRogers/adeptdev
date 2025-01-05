@@ -11,22 +11,24 @@ export default function useRegister() {
   const [isLoading, setIsLoading] = useState(false);
 
   async function signUp(email: string, password: string) {
-    setIsLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-    setIsLoading(false);
-    if (error) throw error;
+    try {
+      setIsLoading(true);
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+      setIsLoading(false);
+      if (error) throw error;
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   async function handleSignUp(email: string, password: string) {
-    setIsLoading(true);
     toast.promise(signUp(email, password), {
       loading: "Sending confirmation email...",
       success: `A confirmation link has been sent to ${email}. Check your inbox or spam folder to proceed.`,
       error: (error) => {
-        setIsLoading(false);
         if (isAuthApiError(error)) {
           return handleAuthErrors(error);
         }
