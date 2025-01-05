@@ -94,7 +94,8 @@
           "src/hooks/**/*",
           "src/lib/**/*",
           "src/utils/**/*",
-          "src/context/**/*"
+          "src/context/**/*",
+          "src/types/**/*"
         ]
       },
       {
