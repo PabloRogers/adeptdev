@@ -1,13 +1,18 @@
 import { User } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 
-const authRoutes = ["/login", "/register", "/forgot-password/email"];
+const authRoutes = [
+  "/login",
+  "/register",
+  "/forgot-password/email",
+  "/callback",
+];
 
 export function isAuthRoute(pathname: string): boolean {
   return authRoutes.some((route) => pathname.startsWith(route));
 }
 
-const publicRoutes = ["/contact"];
+const publicRoutes = ["contact"];
 
 export function isPublicRoute(pathname: string): boolean {
   return publicRoutes.some((route) => pathname.startsWith(route));

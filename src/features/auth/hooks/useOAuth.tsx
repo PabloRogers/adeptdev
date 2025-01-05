@@ -15,6 +15,9 @@ export default function useOAuth(provider: OAuthProvider) {
     setIsLoading(true);
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
+      options: {
+        redirectTo: "http://localhost:3000/callback",
+      },
     });
     if (error) {
       if (isAuthApiError(error)) {

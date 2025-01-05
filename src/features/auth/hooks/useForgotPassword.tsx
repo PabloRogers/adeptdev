@@ -22,7 +22,7 @@ export default function useForgotPassword() {
     try {
       setIsResetLoading(true);
       const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
-        redirectTo: "http://localhost:3000/forgot-password/update",
+        redirectTo: "http://localhost:3000/callback",
       });
       if (error) throw error;
     } finally {

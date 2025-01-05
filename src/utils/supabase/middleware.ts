@@ -34,10 +34,10 @@ export default async function updateSession(request: NextRequest) {
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
-  // Bug OAuth user object always returns null https://github.com/supabase/supabase/issues/24194
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
   // creating a new response object with NextResponse.next() make sure to:
   // 1. Pass the request in it, like so:
