@@ -12,7 +12,7 @@ interface AuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
 
 function AuthForm({ children, ...props }: AuthFormProps) {
   return (
-    <div className="w-[450px] p-10" {...props}>
+    <div className="w-[450px] px-10" {...props}>
       <div className="w-full space-y-8">{children}</div>
     </div>
   );

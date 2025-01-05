@@ -19,15 +19,18 @@ export default function MultiStepFormWrapper({
       data-testid="MultiStepFormWrapper"
     >
       <div className="flex h-fit w-full flex-col items-center justify-center space-y-5">
-        <div className="flex w-full justify-end">
+        <div className="flex w-full px-10">
           {!multiStepForm.isFirstStep && (
-            <Button
-              variant="ghost"
-              onClick={multiStepForm.backStep}
-              className="text-balance text-sm"
-            >
-              <ArrowLeft /> Back
-            </Button>
+            <div className="flex w-full">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={multiStepForm.backStep}
+                className="flex items-center text-balance text-sm"
+              >
+                <ArrowLeft /> <span>Back</span>
+              </Button>
+            </div>
           )}
         </div>
         <div className="space-y-6">{children}</div>
