@@ -4,17 +4,17 @@ import MultiStepFormContext from "@/context/useMultiStepForm";
 import MultiStepFormWrapper from "@/features/auth/components/MultiStepFormWrapper";
 import RegisterFormStep1 from "@/features/auth/components/register/RegisterFormStep1";
 import RegisterFormStep2 from "@/features/auth/components/register/RegisterFormStep2";
-import { RegisterFormDataSchema } from "@/features/auth/types/register";
+import { RegisterMultiStepFormSchema } from "@/features/auth/types/register";
 import useMultiStepForm from "@/hooks/useMultiStepForm";
+import z from "zod";
 
 export default function RegisterForm() {
-  const initialFormData: RegisterFormDataSchema = {
+  const initialFormData: z.infer<typeof RegisterMultiStepFormSchema> = {
     email: "",
     firstName: "",
     lastName: "",
     password: "",
     confirmPassword: "",
-    verificationPin: "",
   };
 
   const steps = [
@@ -22,10 +22,9 @@ export default function RegisterForm() {
     <RegisterFormStep2 key="step2" />,
   ];
 
-  const multiStepForm = useMultiStepForm<RegisterFormDataSchema>(
-    initialFormData,
-    steps,
-  );
+  const multiStepForm = useMultiStepForm<
+    z.infer<typeof RegisterMultiStepFormSchema>
+  >(initialFormData, steps);
 
   return (
     <div data-testid="RegisterForm">

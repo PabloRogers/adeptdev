@@ -1,78 +1,38 @@
-"use client";
+import forgotPasswordAction from "@/features/auth/actions/forgotPassword";
 
-import handleAuthErrors from "@/features/auth/utils/handleAuthErrors";
-import createClient from "@/utils/supabase/client";
-import { isAuthApiError } from "@supabase/supabase-js";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { ForgotPasswordActionSchema } from "@/features/auth/types/forgotPassword";
+import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
+import { z } from "zod";
 
 export default function useForgotPassword() {
-  const supabase = createClient();
-  const router = useRouter();
-  const [isMagicLinkLoading, setIsMagicLinkLoading] = useState(false);
-  const [isUpdatePasswordLoading, setIsUpdatePasswordLoading] = useState(false);
+  const { executeAsync, isExecuting } = useAction(forgotPasswordAction);
 
-  async function sendMagicLink(email: string) {
-    try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: "http://localhost:3000/forgot-password/callback",
-          shouldCreateUser: false,
-        },
-      });
-      if (error) throw error;
-    } finally {
-      setIsMagicLinkLoading(false);
-    }
+  async function handleAction(
+    data: z.infer<typeof ForgotPasswordActionSchema>,
+  ) {
+    const res = await executeAsync(data);
+
+    // Check for server or validation errors and throw them
+    if (res?.serverError) throw new Error(res.serverError);
+    if (res?.validationErrors) throw new Error(res.validationErrors);
   }
 
-  function handleSendMagicLink(email: string) {
-    toast.promise(sendMagicLink(email), {
-      loading: "Sending verification code...",
-      success: `Verification code sent to ${email}`,
+  function handleForgotPassword(
+    data: z.infer<typeof ForgotPasswordActionSchema>,
+  ) {
+    toast.promise(handleAction(data), {
+      loading: "Sending password reset email...",
+      success: `A password reset link has been sent to ${data.email}. Check your inbox or spam folder to proceed.`,
       error: (error) => {
-        if (isAuthApiError(error)) {
-          return handleAuthErrors(error);
+        if (error instanceof Error) {
+          return error.message;
         }
-        return "An error occurred while sending the verification code. Please try again.";
+        return "An unexpected error occurred. Please try again.";
       },
+      duration: 60000,
     });
   }
 
-  async function updatePassword(password: string) {
-    try {
-      setIsUpdatePasswordLoading(true);
-      const { error } = await supabase.auth.updateUser({
-        password,
-      });
-      if (error) throw error;
-    } finally {
-      setIsUpdatePasswordLoading(false);
-    }
-  }
-
-  function handleUpdatePassword(password: string) {
-    toast.promise(updatePassword(password), {
-      loading: "Updating password...",
-      success: () => {
-        router.push("/");
-        return "Password updated successfully";
-      },
-      error: (error) => {
-        if (isAuthApiError(error)) {
-          return handleAuthErrors(error);
-        }
-        return "An error occurred while updating the password. Please try again.";
-      },
-    });
-  }
-
-  return {
-    handleSendMagicLink,
-    isMagicLinkLoading,
-    handleUpdatePassword,
-    isUpdatePasswordLoading,
-  };
+  return { handleForgotPassword, isExecuting };
 }

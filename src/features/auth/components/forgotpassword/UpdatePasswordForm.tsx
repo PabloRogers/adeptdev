@@ -9,14 +9,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import AuthForm from "@/features/auth/components/AuthForm";
-import useForgotPassword from "@/features/auth/hooks/useForgotPassword";
-import { UpdatePasswordFormSchema } from "@/features/auth/types/forgotpassword";
+import useUpdatePassword from "@/features/auth/hooks/useUpdatePassword";
+import { UpdatePasswordFormSchema } from "@/features/auth/types/updatePassword";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
 export default function UpdatePasswordForm() {
-  const { handleUpdatePassword, isUpdatePasswordLoading } = useForgotPassword();
+  const { handleUpdatePassword, isExecuting } = useUpdatePassword();
 
   const form = useForm<z.infer<typeof UpdatePasswordFormSchema>>({
     resolver: zodResolver(UpdatePasswordFormSchema),
@@ -27,7 +28,7 @@ export default function UpdatePasswordForm() {
   });
 
   function onSubmit(data: z.infer<typeof UpdatePasswordFormSchema>) {
-    handleUpdatePassword(data.confirmPassword);
+    handleUpdatePassword({ password: data.newPassword });
   }
 
   return (
@@ -72,9 +73,15 @@ export default function UpdatePasswordForm() {
               </FormItem>
             )}
           />
-          <AuthForm.SubmitButton isloading={isUpdatePasswordLoading}>
+          <AuthForm.SubmitButton isloading={isExecuting}>
             Reset Password
           </AuthForm.SubmitButton>
+          <div className="mt-4 text-center text-sm text-muted-foreground">
+            Remember your password?{" "}
+            <Link href="/" className="underline">
+              Dashboard
+            </Link>
+          </div>
         </form>
       </Form>
     </AuthForm>

@@ -1,10 +1,10 @@
 import FormContentWrapper from "@/features/auth/components/FormContentWrapper";
-import EmailForm from "@/features/auth/components/forgotpassword/EmailForm";
+import ForgotPasswordForm from "@/features/auth/components/forgotpassword/ForgotPasswordForm";
 
 export default function page() {
   return (
     <FormContentWrapper>
-      <EmailForm />
+      <ForgotPasswordForm />
     </FormContentWrapper>
   );
 }

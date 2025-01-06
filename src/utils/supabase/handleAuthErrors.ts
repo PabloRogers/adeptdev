@@ -1,6 +1,7 @@
 import { AuthError } from "@supabase/supabase-js";
 
 // Error codes at https://supabase.com/docs/guides/auth/debugging/error-codes
+// This function maps error codes to user-friendly messages.
 
 export default function handleAuthErrors(error: AuthError): string {
   switch (error.code) {
@@ -32,6 +33,8 @@ export default function handleAuthErrors(error: AuthError): string {
       return "One or more fields are invalid. Please check your input and try again.";
     case "weak_password":
       return "Your password does not meet the strength requirements. Please use a stronger password.";
+    case "same_password":
+      return "Your new password must be different from your current password.";
     default:
       return "[Auth Api Error] An unexpected error occurred. Please contact support if the issue persists.";
   }

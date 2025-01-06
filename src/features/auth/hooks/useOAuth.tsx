@@ -1,32 +1,24 @@
 "use client";
 
-import { OAuthProviders } from "@/features/auth/types/OAuthProviders";
-import handleAuthErrors from "@/features/auth/utils/handleAuthErrors";
-import createClient from "@/utils/supabase/client";
-import { isAuthApiError } from "@supabase/supabase-js";
-import { useState } from "react";
+import OAuthAction from "@/features/auth/actions/OAuth";
+import OAuthProvidersSchema from "@/features/auth/types/OAuth";
+import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
+import z from "zod";
 
-export default function useOAuth(provider: OAuthProviders) {
-  const supabase = createClient();
-  const [isLoading, setIsLoading] = useState(false);
+export default function useOAuth(
+  provider: z.infer<typeof OAuthProvidersSchema>,
+) {
+  const { executeAsync, isExecuting } = useAction(OAuthAction);
 
-  async function handleSignInWithOAuthProvider() {
-    setIsLoading(true);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: "http://localhost:3000/callback",
-      },
-    });
-    if (error) {
-      if (isAuthApiError(error)) {
-        handleAuthErrors(error);
-      } else {
-        toast("An unexpected error occurred. Please try again.");
-      }
-    }
+  async function handleOAuthSignIn() {
+    const res = await executeAsync(provider);
+    if (res?.serverError)
+      toast.error("An unexpected error occurred. Please try again.");
+
+    if (res?.validationErrors)
+      toast.error("Schema validation error occurred. Please try again.");
   }
 
-  return { handleSignInWithOAuthProvider, isLoading };
+  return { handleOAuthSignIn, isExecuting };
 }

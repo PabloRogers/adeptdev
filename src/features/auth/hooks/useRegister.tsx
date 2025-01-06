@@ -1,39 +1,28 @@
 "use client";
 
-import handleAuthErrors from "@/features/auth/utils/handleAuthErrors";
-import createClient from "@/utils/supabase/client";
-import { isAuthApiError } from "@supabase/supabase-js";
-import { useState } from "react";
+import register from "@/features/auth/actions/register";
+import { RegisterActionSchema } from "@/features/auth/types/register";
+import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
+import z from "zod";
 
 export default function useRegister() {
-  const supabase = createClient();
-  const [isLoading, setIsLoading] = useState(false);
+  const { executeAsync, isExecuting } = useAction(register);
 
-  async function signUp(email: string, password: string) {
-    try {
-      setIsLoading(true);
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: "http://localhost:3000/callback",
-        },
-      });
-      setIsLoading(false);
-      if (error) throw error;
-    } finally {
-      setIsLoading(false);
-    }
+  async function handleAction(data: z.infer<typeof RegisterActionSchema>) {
+    const res = await executeAsync(data);
+    // Check for server or validation errors and throw them
+    if (res?.serverError) throw new Error(res.serverError);
+    if (res?.validationErrors) throw new Error(res.validationErrors);
   }
 
-  async function handleSignUp(email: string, password: string) {
-    toast.promise(signUp(email, password), {
+  async function handleRegister(data: z.infer<typeof RegisterActionSchema>) {
+    toast.promise(handleAction(data), {
       loading: "Sending confirmation email...",
-      success: `A confirmation link has been sent to ${email}. Check your inbox or spam folder to proceed.`,
+      success: `A confirmation link has been sent to ${data.email}. Check your inbox or spam folder to proceed.`,
       error: (error) => {
-        if (isAuthApiError(error)) {
-          return handleAuthErrors(error);
+        if (error instanceof Error) {
+          return error.message;
         }
         return "An unexpected error occurred. Please try again.";
       },
@@ -41,5 +30,5 @@ export default function useRegister() {
     });
   }
 
-  return { handleSignUp, isLoading };
+  return { handleRegister, isExecuting };
 }

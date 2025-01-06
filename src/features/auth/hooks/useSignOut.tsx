@@ -1,16 +1,21 @@
 "use client";
 
-import createClient from "@/utils/supabase/client";
-import { useRouter } from "next/navigation";
+import signOutAction from "@/features/auth/actions/signOut";
+import { useAction } from "next-safe-action/hooks";
+import { toast } from "sonner";
 
 export default function useSignOut() {
-  const router = useRouter();
+  const { executeAsync, isExecuting } = useAction(signOutAction);
 
-  async function signOut() {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/login");
+  async function handleSignOut() {
+    toast.promise(executeAsync, {
+      loading: "Signing out...",
+      success: "You have been signed out.",
+      error: (error) => {
+        return error;
+      },
+    });
   }
 
-  return { signOut };
+  return { handleSignOut, isExecuting };
 }

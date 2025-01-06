@@ -1,45 +1,35 @@
 "use client";
 
-import LoginFormSchema from "@/features/auth/types/login";
-import handleAuthErrors from "@/features/auth/utils/handleAuthErrors";
-import createClient from "@/utils/supabase/client";
-import { isAuthApiError } from "@supabase/supabase-js";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import loginAction from "@/features/auth/actions/login";
+import { LoginActionSchema } from "@/features/auth/types/login";
+import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import z from "zod";
 
 export default function useLogin() {
-  const supabase = createClient();
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+  const { executeAsync, isExecuting } = useAction(loginAction);
 
-  async function login(formData: z.infer<typeof LoginFormSchema>) {
-    try {
-      setIsLoading(true);
-      const { error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      });
-      if (error) throw error;
-      router.push("/");
-    } finally {
-      setIsLoading(false);
-    }
+  async function handleAction(data: z.infer<typeof LoginActionSchema>) {
+    const res = await executeAsync(data);
+    // Check for server or validation errors and throw them
+    if (res?.serverError) throw new Error(res.serverError);
+    if (res?.validationErrors) throw new Error(res.validationErrors);
   }
 
-  async function handleLogin(formData: z.infer<typeof LoginFormSchema>) {
-    toast.promise(Promise.resolve(login(formData)), {
+  function handleLogin(data: z.infer<typeof LoginActionSchema>) {
+    toast.promise(handleAction(data), {
       loading: "Logging in...",
-      success: "Login successful!",
+      success: () => {
+        return "Logged in successfully";
+      },
       error: (error) => {
-        if (isAuthApiError(error)) {
-          return handleAuthErrors(error);
+        if (error instanceof Error) {
+          return error.message;
         }
         return "An unexpected error occurred. Please try again.";
       },
     });
   }
 
-  return { handleLogin, login, isLoading };
+  return { handleLogin, isExecuting };
 }

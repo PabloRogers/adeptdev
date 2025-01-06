@@ -12,19 +12,19 @@ import { Input } from "@/components/ui/input";
 import AuthForm from "@/features/auth/components/AuthForm";
 import useRegister from "@/features/auth/hooks/useRegister";
 import {
-  RegisterFormDataSchema,
   RegisterFormStep2Schema,
+  RegisterMultiStepFormSchema,
 } from "@/features/auth/types/register";
 import useMultiStepFormContext from "@/hooks/useMultiStepFormContext";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
 export default function RegisterStep2() {
-  const { handleSignUp, isLoading } = useRegister();
-  const router = useRouter();
-  const multiStepForm = useMultiStepFormContext<RegisterFormDataSchema>();
+  const { handleRegister, isExecuting } = useRegister();
+
+  const multiStepForm =
+    useMultiStepFormContext<z.infer<typeof RegisterMultiStepFormSchema>>();
 
   const form = useForm<z.infer<typeof RegisterFormStep2Schema>>({
     resolver: zodResolver(RegisterFormStep2Schema),
@@ -38,8 +38,12 @@ export default function RegisterStep2() {
 
   async function onSubmit(data: z.infer<typeof RegisterFormStep2Schema>) {
     multiStepForm.setData(data);
-    await handleSignUp(multiStepForm.formData.email, data.password);
-    router.push("/register");
+    await handleRegister({
+      email: multiStepForm.getData().email,
+      password: data.password,
+      first_name: data.firstName,
+      last_name: data.lastName,
+    });
   }
 
   return (
@@ -126,7 +130,7 @@ export default function RegisterStep2() {
               </FormItem>
             )}
           />
-          <AuthForm.SubmitButton isloading={isLoading}>
+          <AuthForm.SubmitButton isloading={isExecuting}>
             Continue
           </AuthForm.SubmitButton>
         </form>

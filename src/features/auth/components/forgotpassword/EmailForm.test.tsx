@@ -1,4 +1,4 @@
-import EmailForm from "@/features/auth/components/forgotpassword/EmailForm";
+import EmailForm from "@/features/auth/components/forgotpassword/ForgotPasswordForm";
 import useForgotPassword from "@/features/auth/hooks/useForgotPassword";
 import { render, screen, userEvent } from "@/utils/test";
 

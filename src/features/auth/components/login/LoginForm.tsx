@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import AuthForm from "@/features/auth/components/AuthForm";
 import OAuth from "@/features/auth/components/OAuth";
 import useLogin from "@/features/auth/hooks/useLogin";
-import LoginFormSchema from "@/features/auth/types/login";
+import { LoginFormSchema } from "@/features/auth/types/login";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -21,7 +21,7 @@ import { FcGoogle } from "react-icons/fc";
 import z from "zod";
 
 export default function LoginForm() {
-  const { handleLogin, isLoading } = useLogin();
+  const { handleLogin, isExecuting } = useLogin();
 
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
@@ -80,7 +80,7 @@ export default function LoginForm() {
               </FormItem>
             )}
           />
-          <AuthForm.SubmitButton isloading={isLoading}>
+          <AuthForm.SubmitButton isloading={isExecuting}>
             Login
           </AuthForm.SubmitButton>
           <div className="mt-4 text-center text-sm text-muted-foreground">

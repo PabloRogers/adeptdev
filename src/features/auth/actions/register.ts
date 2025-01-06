@@ -1,0 +1,30 @@
+"use server";
+
+import { RegisterActionSchema } from "@/features/auth/types/register";
+import actionClient from "@/lib/safe-action";
+import createClient from "@/utils/supabase/server";
+
+const registerAction = actionClient
+  .schema(RegisterActionSchema, {
+    handleValidationErrorsShape: async () =>
+      "Invalid form data. Please check your input and try again.",
+  })
+  .action(
+    async ({ parsedInput: { email, password, first_name, last_name } }) => {
+      const supabase = await createClient();
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: "http://localhost:3000/callback",
+          data: {
+            first_name,
+            last_name,
+          },
+        },
+      });
+      if (error) throw error;
+    },
+  );
+
+export default registerAction;
