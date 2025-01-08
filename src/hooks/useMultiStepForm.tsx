@@ -1,5 +1,5 @@
 import UseMultiStepForm from "@/types/UseMultiStepForm";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 export default function useMultiStepForm<T>(
   initialFormData: T,
@@ -12,27 +12,27 @@ export default function useMultiStepForm<T>(
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === steps.length - 1;
 
-  const nextStep = useCallback(() => {
+  function nextStep() {
     setCurrentStepIndex((index) => (isLastStep ? index : index + 1));
-  }, [isLastStep]);
+  }
 
-  const backStep = useCallback(() => {
+  function backStep() {
     setCurrentStepIndex((index) => (isFirstStep ? index : index - 1));
-  }, [isFirstStep]);
+  }
 
-  const goTo = useCallback((index: number) => {
+  function goTo(index: number) {
     setCurrentStepIndex(index);
-  }, []);
+  }
 
-  const setSteps = useCallback((newSteps: React.ReactElement[]) => {
+  function setSteps(newSteps: React.ReactElement[]) {
     setStepsState(newSteps);
-  }, []);
+  }
 
-  const setData = useCallback((newFormData: Partial<T>) => {
+  function setData(newFormData: Partial<T>) {
     setFormData((prevFormData) => ({ ...prevFormData, ...newFormData }));
-  }, []);
+  }
 
-  const getData = useCallback(() => formData, [formData]);
+  const getData = () => formData;
 
   return {
     currentStepIndex,
