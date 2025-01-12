@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import AuthForm from "@/features/auth/components/AuthForm";
-import OAuth from "@/features/auth/components/OAuth";
+import OAuthButton from "@/features/auth/components/OAuthButton";
 import useLogin from "@/features/auth/hooks/useLogin";
 import { LoginFormSchema } from "@/features/auth/types/login";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,8 +40,16 @@ export default function LoginForm() {
         </AuthForm.SubHeader>
       </AuthForm.HeaderWrapper>
       <div className="space-y-2">
-        <OAuth provider="github" Icon={FaGithub} text="Sign in with Github" />
-        <OAuth provider="google" Icon={FcGoogle} text="Sign in with Google" />
+        <OAuthButton
+          provider="github"
+          Icon={FaGithub}
+          text="Sign in with Github"
+        />
+        <OAuthButton
+          provider="google"
+          Icon={FcGoogle}
+          text="Sign in with Google"
+        />
       </div>
       <AuthForm.Separator />
       <Form {...form}>

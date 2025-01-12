@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import AuthForm from "@/features/auth/components/AuthForm";
-import OAuth from "@/features/auth/components/OAuth";
+import OAuthButton from "@/features/auth/components/OAuthButton";
 import {
-  RegisterFormDataSchema,
   RegisterFormStep1Schema,
+  RegisterMultiStepFormSchema,
 } from "@/features/auth/types/register";
 import useMultiStepFormContext from "@/hooks/useMultiStepFormContext";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,7 +24,8 @@ import { FcGoogle } from "react-icons/fc";
 import z from "zod";
 
 export default function RegisterStep1() {
-  const multiStepForm = useMultiStepFormContext<RegisterFormDataSchema>();
+  const multiStepForm =
+    useMultiStepFormContext<z.infer<typeof RegisterMultiStepFormSchema>>();
 
   const form = useForm<z.infer<typeof RegisterFormStep1Schema>>({
     resolver: zodResolver(RegisterFormStep1Schema),
@@ -47,8 +48,16 @@ export default function RegisterStep1() {
         </AuthForm.SubHeader>
       </AuthForm.HeaderWrapper>
       <div className="space-y-2">
-        <OAuth provider="github" Icon={FaGithub} text="Sign in with Github" />
-        <OAuth provider="google" Icon={FcGoogle} text="Sign in with Google" />
+        <OAuthButton
+          provider="github"
+          Icon={FaGithub}
+          text="Sign in with Github"
+        />
+        <OAuthButton
+          provider="google"
+          Icon={FcGoogle}
+          text="Sign in with Google"
+        />
       </div>
       <AuthForm.Separator />
       <Form {...form}>
