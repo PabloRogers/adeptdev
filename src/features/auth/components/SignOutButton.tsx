@@ -1,6 +1,6 @@
 "use client";
 
-import IconLoadingButton from "@/features/auth/components/IconLoadingButton";
+import IconLoadingButton from "@/components/IconLoadingButton";
 import useSignOut from "@/features/auth/hooks/useSignOut";
 import { LogOut } from "react-feather";
 

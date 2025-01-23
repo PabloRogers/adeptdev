@@ -1,5 +1,7 @@
 "use client";
 
+import IconLoadingButton from "@/components/IconLoadingButton";
+import TogglePasswordInput from "@/components/TogglePasswordInput";
 import {
   Form,
   FormControl,
@@ -13,6 +15,7 @@ import useUpdatePassword from "@/features/auth/hooks/useUpdatePassword";
 import { UpdatePasswordFormSchema } from "@/features/auth/types/updatePassword";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { LogIn } from "react-feather";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -48,7 +51,7 @@ export default function UpdatePasswordForm() {
               <FormItem>
                 <FormLabel>New Password</FormLabel>
                 <FormControl>
-                  <AuthForm.PasswordInput
+                  <TogglePasswordInput
                     placeholder="Enter your new password"
                     {...field}
                   />
@@ -64,7 +67,7 @@ export default function UpdatePasswordForm() {
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
-                  <AuthForm.PasswordInput
+                  <TogglePasswordInput
                     placeholder="Confirm Your Password"
                     {...field}
                   />
@@ -73,9 +76,12 @@ export default function UpdatePasswordForm() {
               </FormItem>
             )}
           />
-          <AuthForm.SubmitButton isloading={isExecuting}>
-            Reset Password
-          </AuthForm.SubmitButton>
+          <IconLoadingButton
+            text="Continue"
+            Icon={LogIn}
+            isExecuting={isExecuting}
+            className="w-full"
+          />
           <div className="mt-4 text-center text-sm text-muted-foreground">
             Remember your password?{" "}
             <Link href="/" className="underline">

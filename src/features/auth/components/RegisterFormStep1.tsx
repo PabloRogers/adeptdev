@@ -1,5 +1,6 @@
 "use client";
 
+import IconLoadingButton from "@/components/IconLoadingButton";
 import {
   Form,
   FormControl,
@@ -18,12 +19,13 @@ import {
 import useMultiStepFormContext from "@/hooks/useMultiStepFormContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { LogIn } from "react-feather";
 import { useForm } from "react-hook-form";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import z from "zod";
 
-export default function RegisterStep1() {
+export default function RegisterFormStep1() {
   const multiStepForm =
     useMultiStepFormContext<z.infer<typeof RegisterMultiStepFormSchema>>();
 
@@ -75,12 +77,12 @@ export default function RegisterStep1() {
               </FormItem>
             )}
           />
-          <AuthForm.SubmitButton
-            disabled={form.formState.isSubmitting}
-            isloading={form.formState.isSubmitting}
-          >
-            Continue
-          </AuthForm.SubmitButton>
+          <IconLoadingButton
+            text="Continue"
+            Icon={LogIn}
+            isExecuting={form.formState.isSubmitting}
+            className="w-full"
+          />
           <div className="mt-4 text-center text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link href="/login" className="underline">

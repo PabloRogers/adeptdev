@@ -1,6 +1,6 @@
 "use client";
 
-import IconLoadingButton from "@/features/auth/components/IconLoadingButton";
+import IconLoadingButton from "@/components/IconLoadingButton";
 import useOAuth from "@/features/auth/hooks/useOAuth";
 import OAuthProvidersSchema from "@/features/auth/types/OAuth";
 import z from "zod";
@@ -21,7 +21,7 @@ export default function OAuthButton({ provider, Icon, text }: OAuthProps) {
       Icon={Icon}
       text={text}
       variant="outline"
-      className="w-full text-neutral-200"
+      className="w-full"
     />
   );
 }

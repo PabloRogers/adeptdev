@@ -1,5 +1,7 @@
 "use client";
 
+import IconLoadingButton from "@/components/IconLoadingButton";
+import TogglePasswordInput from "@/components/TogglePasswordInput";
 import {
   Form,
   FormControl,
@@ -15,6 +17,7 @@ import useLogin from "@/features/auth/hooks/useLogin";
 import { LoginFormSchema } from "@/features/auth/types/login";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { LogIn } from "react-feather";
 import { useForm } from "react-hook-form";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -82,15 +85,18 @@ export default function LoginForm() {
                   </Link>
                 </div>
                 <FormControl>
-                  <AuthForm.PasswordInput placeholder="Password" {...field} />
+                  <TogglePasswordInput placeholder="Password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <AuthForm.SubmitButton isloading={isExecuting}>
-            Login
-          </AuthForm.SubmitButton>
+          <IconLoadingButton
+            text="Login"
+            Icon={LogIn}
+            isExecuting={isExecuting}
+            className="w-full"
+          />
           <div className="mt-4 text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
             <Link href="/register" className="underline">

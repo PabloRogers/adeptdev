@@ -1,5 +1,6 @@
 "use client";
 
+import IconLoadingButton from "@/components/IconLoadingButton";
 import {
   Form,
   FormControl,
@@ -11,10 +12,10 @@ import {
 import { Input } from "@/components/ui/input";
 import AuthForm from "@/features/auth/components/AuthForm";
 import useForgotPassword from "@/features/auth/hooks/useForgotPassword";
-
 import { ForgotPasswordFormSchema } from "@/features/auth/types/forgotPassword";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { LogIn } from "react-feather";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -53,9 +54,12 @@ export default function ForgotPasswordForm() {
               </FormItem>
             )}
           />
-          <AuthForm.SubmitButton isloading={isExecuting}>
-            Continue
-          </AuthForm.SubmitButton>
+          <IconLoadingButton
+            text="Continue"
+            Icon={LogIn}
+            isExecuting={isExecuting}
+            className="w-full"
+          />
           <div className="mt-4 text-center text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link href="/login" className="underline">

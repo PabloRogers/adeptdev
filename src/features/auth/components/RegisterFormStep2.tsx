@@ -1,5 +1,7 @@
 "use client";
 
+import IconLoadingButton from "@/components/IconLoadingButton";
+import TogglePasswordInput from "@/components/TogglePasswordInput";
 import {
   Form,
   FormControl,
@@ -17,10 +19,11 @@ import {
 } from "@/features/auth/types/register";
 import useMultiStepFormContext from "@/hooks/useMultiStepFormContext";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LogIn } from "react-feather";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
-export default function RegisterStep2() {
+export default function RegisterFormStep2() {
   const { handleRegister, isExecuting } = useRegister();
 
   const multiStepForm =
@@ -104,7 +107,7 @@ export default function RegisterStep2() {
                 <FormLabel>Enter Password</FormLabel>
 
                 <FormControl>
-                  <AuthForm.PasswordInput
+                  <TogglePasswordInput
                     placeholder="Enter your password."
                     {...field}
                   />
@@ -121,7 +124,7 @@ export default function RegisterStep2() {
                 <FormLabel>Confirm Password</FormLabel>
 
                 <FormControl>
-                  <AuthForm.PasswordInput
+                  <TogglePasswordInput
                     placeholder="Confirm your password."
                     {...field}
                   />
@@ -130,9 +133,12 @@ export default function RegisterStep2() {
               </FormItem>
             )}
           />
-          <AuthForm.SubmitButton isloading={isExecuting}>
-            Continue
-          </AuthForm.SubmitButton>
+          <IconLoadingButton
+            text="Register"
+            Icon={LogIn}
+            isExecuting={isExecuting}
+            className="w-full"
+          />
         </form>
       </Form>
     </AuthForm>
