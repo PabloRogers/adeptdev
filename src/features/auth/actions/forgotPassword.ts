@@ -1,6 +1,6 @@
 "use server";
 
-import { ForgotPasswordActionSchema } from "@/features/auth/types/forgotPassword";
+import { ForgotPasswordActionSchema } from "@/features/auth/types/forgotpassword";
 import { unauthenticatedAction } from "@/lib/safe-action";
 import createClient from "@/utils/supabase/server";
 
