@@ -1,10 +1,10 @@
 "use server";
 
 import { ForgotPasswordActionSchema } from "@/features/auth/types/forgotPassword";
-import actionClient from "@/lib/safe-action";
+import { unauthenticatedAction } from "@/lib/safe-action";
 import createClient from "@/utils/supabase/server";
 
-const forgotPasswordAction = actionClient
+const forgotPasswordAction = unauthenticatedAction
   .schema(ForgotPasswordActionSchema, {
     handleValidationErrorsShape: async () =>
       "Invalid form data. Please check your input and try again.",

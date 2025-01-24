@@ -1,10 +1,10 @@
 "use server";
 
-import actionClient from "@/lib/safe-action";
+import { unauthenticatedAction } from "@/lib/safe-action";
 import createClient from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
-const signOutAction = actionClient.action(async () => {
+const signOutAction = unauthenticatedAction.action(async () => {
   const supabase = await createClient();
   const { error } = await supabase.auth.signOut();
   if (error) {

@@ -1,11 +1,11 @@
 "use server";
 
 import { LoginActionSchema } from "@/features/auth/types/login";
-import actionClient from "@/lib/safe-action";
+import { unauthenticatedAction } from "@/lib/safe-action";
 import createClient from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
-const loginAction = actionClient
+const loginAction = unauthenticatedAction
   .schema(LoginActionSchema, {
     handleValidationErrorsShape: async () =>
       "Invalid form data. Please check your input and try again.",

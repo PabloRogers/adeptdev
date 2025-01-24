@@ -1,11 +1,11 @@
 "use server";
 
 import OAuthProvidersSchema from "@/features/auth/types/OAuth";
-import actionClient from "@/lib/safe-action";
+import { unauthenticatedAction } from "@/lib/safe-action";
 import createClient from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
-const OAuthAction = actionClient
+const OAuthAction = unauthenticatedAction
   .schema(OAuthProvidersSchema, {
     handleValidationErrorsShape: async () =>
       "Invalid OAuth provider. Please try again.",
