@@ -2,27 +2,27 @@ import RegisterForm from "@/features/auth/components/RegisterForm";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-// Mock the child components
-vi.mock("@/features/auth/components/register/RegisterFormStep1", () => ({
+vi.mock("@/features/auth/components/RegisterFormStep1", () => ({
   default: () => <div data-testid="RegisterFormStep1">Step 1</div>,
 }));
 
-vi.mock("@/features/auth/components/register/RegisterFormStep2", () => ({
+vi.mock("@/features/auth/components/RegisterFormStep2", () => ({
   default: () => <div data-testid="RegisterFormStep2">Step 2</div>,
 }));
 
+// Mock the useMultiStepForm hook
 vi.mock("@/hooks/useMultiStepForm", () => {
   return {
     default: vi.fn(() => ({
-      currentStepIndex: 1,
+      currentStepIndex: 0,
       steps: [
         <div key="RegisterFormStep1">Step 1</div>,
         <div key="RegisterFormStep2">Step 2</div>,
         <div key="RegisterFormStep3">Step 3</div>,
       ],
-      step: <div key="RegisterFormStep2">Step 2</div>,
+      step: <div data-testid="RegisterFormStep1">Step 1</div>,
       formData: { email: "test@example.com" },
-      isFirstStep: false,
+      isFirstStep: true,
       isLastStep: false,
       length: 3,
       goTo: vi.fn(),
@@ -39,16 +39,17 @@ describe("RegisterForm", () => {
   it("renders the RegisterForm component", () => {
     render(<RegisterForm />);
 
-    // Check if the wrapper div is rendered
-    const registerForm = screen.getByTestId("RegisterForm");
-    expect(registerForm).toBeInTheDocument();
-
-    // Check if the first step of the form is rendered
+    // Check if the RegisterFormStep1 is rendered
     const step1 = screen.getByTestId("RegisterFormStep1");
     expect(step1).toBeInTheDocument();
+  });
+  it("should not render steps that are not the current step", () => {
+    render(<RegisterForm />);
 
-    // Ensure the second step is not yet rendered
-    const step2 = screen.getByTestId("RegisterFormStep2");
+    const step2 = screen.queryByTestId("RegisterFormStep2");
+    const step3 = screen.queryByTestId("RegisterFormStep3");
+
     expect(step2).not.toBeInTheDocument();
+    expect(step3).not.toBeInTheDocument();
   });
 });
