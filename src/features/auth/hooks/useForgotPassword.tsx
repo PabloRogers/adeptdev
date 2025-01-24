@@ -1,6 +1,6 @@
 import forgotPasswordAction from "@/features/auth/actions/forgotPassword";
 
-import { ForgotPasswordActionSchema } from "@/features/auth/types/forgotPassword";
+import { ForgotPasswordActionSchema } from "@/features/auth/types/forgotpassword";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import { z } from "zod";

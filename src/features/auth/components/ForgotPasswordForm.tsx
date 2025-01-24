@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import AuthForm from "@/features/auth/components/AuthForm";
 import useForgotPassword from "@/features/auth/hooks/useForgotPassword";
-import { ForgotPasswordFormSchema } from "@/features/auth/types/forgotPassword";
+import { ForgotPasswordFormSchema } from "@/features/auth/types/forgotpassword";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { LogIn } from "react-feather";
