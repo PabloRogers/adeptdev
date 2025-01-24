@@ -15,7 +15,7 @@ const OAuthAction = unauthenticatedAction
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: "http://localhost:3000/callback",
+        redirectTo: `${process.env.BASE_URL}/callback`,
       },
     });
     if (error) {

@@ -16,7 +16,7 @@ const registerAction = unauthenticatedAction
         email,
         password,
         options: {
-          emailRedirectTo: "http://localhost:3000/callback",
+          emailRedirectTo: `${process.env.BASE_URL}/callback`,
           data: {
             first_name,
             last_name,
