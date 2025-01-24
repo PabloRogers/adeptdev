@@ -17,16 +17,20 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["src/*"]
     }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/__tests__/**/*",
     ".next/types/**/*.ts",
     "commitlint.config.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "coverage"]
 }
