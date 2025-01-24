@@ -1,1 +1,1 @@
-npx run vitest
+npm run test:pre-push

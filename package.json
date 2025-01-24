@@ -11,6 +11,7 @@
     "lint:fix": "eslint . --fix",
     "prepare": "husky",
     "prettier": "prettier --write .",
+    "test:pre-push": "vitest run",
     "test": "vitest",
     "test:coverage": "vitest --coverage --ui"
   },
