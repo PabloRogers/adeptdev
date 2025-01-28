@@ -19,7 +19,7 @@ export default function FormContentWrapper({
         </div>
 
         {/* Right Card */}
-        <div className="flex h-full w-full max-w-xl items-center justify-center sm:h-full sm:w-full lg:w-1/2 lg:px-2 lg:py-10">
+        <div className="flex h-full w-full max-w-lg items-center justify-center sm:h-full sm:w-full lg:w-1/2 lg:px-2 lg:py-10">
           <Card className="flex h-full max-h-[700px] min-h-[400px] w-full items-center justify-center rounded-lg sm:h-full sm:w-full lg:max-h-[700px]">
             {children}
           </Card>
