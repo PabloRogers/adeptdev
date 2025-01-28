@@ -14,7 +14,7 @@ const forgotPasswordAction = unauthenticatedAction
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: "http://localhost:3000/forgot-password/callback",
+        emailRedirectTo: "https://www.adeptdev.io/forgot-password/callback",
         shouldCreateUser: false,
       },
     });

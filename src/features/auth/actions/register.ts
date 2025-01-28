@@ -16,7 +16,7 @@ const registerAction = unauthenticatedAction
         email,
         password,
         options: {
-          emailRedirectTo: "http://localhost:3000/callback",
+          emailRedirectTo: "https://www.adeptdev.io/callback",
           data: {
             first_name,
             last_name,
