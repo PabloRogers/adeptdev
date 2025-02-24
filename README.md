@@ -1,5 +1,4 @@
-View Auth Branch For Code
-View at: https://adeptdev.vercel.app/
+View at: https://www.adeptdev.io/
 
 
 # Commitlint
